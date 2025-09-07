@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+:root{
+  --corPrim:#1F1D1D;
+  --corSec:#EEE8F0;
+  --corTer:#BE78B9;
+  --corQua:#581C58;
+  --corQui:#821681;
+}
