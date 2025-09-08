@@ -1,15 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home";
+import Login from "../pages/Login";
 
 const Router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
-    children: [
-      // aqui você pode adicionar rotas filhas se precisar
-      // { path: "perfil", element: <Perfil /> }
-    ],
   },
+  {
+    path: "/login",
+    element: <Login/>
+  }
 ]);
 
 export default Router;
