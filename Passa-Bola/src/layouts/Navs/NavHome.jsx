@@ -7,7 +7,6 @@ import hero2 from '../../assets/hero2.jpg';
 
 const NavHome = () => {
   const navigate = useNavigate();
-  const [current, setCurrent] = useState(0);
   const [alert, setAlert] = useState({ show: false, message: "", type: "error" });
 
   const handleClick1 = () => {
@@ -55,7 +54,7 @@ const NavHome = () => {
             {/* Slide 1 */}
             <CarouselItem className="relative">
               <div className="relative w-full h-screen">
-                <img src={hero1} alt="Hero 1" className="w-full h-full object-cover" />
+                <img src={hero1} alt="Imagem jogue agora Hero" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-4 text-center z-10">
                   <h1 className="text-4xl font-bold text-purple-700 mb-8">Jogue Agora!</h1>
                   <p className="mt-2 text-lg mb-8">
