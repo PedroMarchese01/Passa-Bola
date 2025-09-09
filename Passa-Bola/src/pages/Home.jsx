@@ -1,8 +1,9 @@
+import NavHome from '@/layouts/Navs/NavHome'
 import React from 'react'
-import NavHome from '../layouts/Navs/NavHome'
 const Home = () => {
   return (
-    <div className='bg-[var(--corPrim)] w-full h-screen'>{/* fundo */}
+    <div className='w-full h-120'>
+      <p>ola</p>
       <NavHome/>
     </div>
   )
