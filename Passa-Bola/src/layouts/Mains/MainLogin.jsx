@@ -23,6 +23,7 @@ const MainLogin = () => {
     senha: "",
     confirmS: "",
     cpf: "",
+    telefone:"",
     date: "",
   });
   const [mostrarC, setMostrarC] = useState(false);
@@ -76,9 +77,9 @@ const MainLogin = () => {
 
   const handleCadastro = () => {
     setCadastroMsg(null);
-    const { nome, email, senha, confirmS, cpf, date } = cadastro;
+    const { nome, email, senha, confirmS, cpf, telefone, date } = cadastro;
 
-    if (!nome || !email || !senha || !confirmS || !cpf || !date) {
+    if (!nome || !email || !senha || !confirmS || !cpf || !date || !telefone) {
       setCadastroMsg({
         title: "Campos obrigatórios",
         description: "Por favor, preencha todos os campos.",
@@ -102,6 +103,7 @@ const MainLogin = () => {
       return;
     }
 
+
     const users = JSON.parse(localStorage.getItem("users")) || [];
     if (users.some((u) => u.email === email)) {
       setCadastroMsg({ title: "Erro", description: "Email já cadastrado." });
@@ -112,7 +114,30 @@ const MainLogin = () => {
       return;
     }
 
-    users.push({ nome, email, senha, cpf, date });
+  let numeros = "";
+  for (let i = 0; i < telefone.length; i++) {
+    if (telefone[i] >= "0" && telefone[i] <= "9") {
+      numeros += telefone[i];
+    }
+    }
+
+
+  if (numeros.length < 11) {
+    if (numeros.length === 9) {
+      setCadastroMsg({
+        title: "Telefone incompleto",
+        description: "Adicione o DDD (ex: (11)).",
+      });
+    } else {
+      setCadastroMsg({
+        title: "Telefone inválido",
+        description: "O telefone precisa ter 11 dígitos numéricos.",
+      });
+    }
+    return;
+  }
+    
+    users.push({ nome, email, senha, cpf, telefone, date });
     localStorage.setItem("users", JSON.stringify(users));
 
     setCadastroMsg({ title: "Sucesso", description: "Cadastro realizado com sucesso!" });
@@ -176,6 +201,7 @@ const MainLogin = () => {
               <Input placeholder="Senha" type={mostrarC ? "text" : "password"} className="text-white w-full" autoComplete="new-password" onChange={(e) => handleCadastroChange("senha", e.target.value)} value={cadastro.senha} />
               <Input placeholder="Confirme a senha" type={mostrarC ? "text" : "password"} className="text-white w-full" autoComplete="new-password" onChange={(e) => handleCadastroChange("confirmS", e.target.value)} value={cadastro.confirmS} />
               <Input placeholder="CPF" className="text-white" onChange={(e) => handleCadastroChange("cpf", e.target.value)} value={cadastro.cpf} />
+              <Input placeholder="telefone" className = "text-white" type = "text" onChange={(e) => handleCadastroChange("telefone", e.target.value)} value ={cadastro.telefone}/>
               <Input placeholder="Data de nascimento" type="date" className="text-black appearance-none bg-white" onChange={(e) => handleCadastroChange("date", e.target.value)} value={cadastro.date} />
 
               <div className="flex gap-2 items-center">
