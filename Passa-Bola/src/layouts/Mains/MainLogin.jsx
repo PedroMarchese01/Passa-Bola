@@ -216,7 +216,55 @@ const MainLogin = () => {
                 <h2 className="text-2xl font-bold">Termos de Uso e Política de Privacidade – Passa Bola</h2>
                 <Button className="bg-white text-black hover:bg-purple-700 hover:text-white" onClick={() => setOpenModal(false)}>x</Button>
               </div>
-              <div className="p-6 overflow-y-auto flex-1 flex flex-col space-y-4">{/* Conteúdo dos termos */}</div>
+              <div className="p-6 overflow-y-auto flex-1 flex flex-col space-y-4"><div className="flex flex-col space-y-4">
+  <div className="flex flex-col space-y-2">
+    <strong>1. Aceitação dos Termos</strong>
+    <p>Ao se cadastrar ou utilizar os serviços do site Passa Bola, você concorda integralmente com estes Termos de Uso e com nossa Política de Privacidade. Caso não concorde com algum ponto, solicitamos que não utilize os serviços.</p>
+  </div>
+
+  <div className="flex flex-col space-y-2">
+    <strong>2. Coleta e Uso de Dados Pessoais</strong>
+    <p>Os dados fornecidos pelos usuários (como nome, email, data de nascimento, CPF e informações relacionadas aos jogos) serão coletados e utilizados exclusivamente para:</p>
+    <ul className="list-disc list-inside ml-4 space-y-1">
+      <li>Gerenciamento de participação nos jogos;</li>
+      <li>Melhoria da experiência de jogo e da própria marca Passa Bola;</li>
+      <li>Cumprimento de obrigações legais, regulatórias ou contratuais.</li>
+    </ul>
+    <p>Os dados <strong>não serão vendidos, compartilhados ou utilizados para fins comerciais</strong> externos à Passa Bola, exceto nos casos de segurança, investigação de irregularidades ou situações emergenciais relacionadas às jogadoras ou participantes.</p>
+  </div>
+
+  <div className="flex flex-col space-y-2">
+    <strong>3. Responsabilidade pelo Conteúdo e Atividades</strong>
+    <p>O site Passa Bola fornece informações e acesso a jogos, mas <strong>não se responsabiliza por incidentes, acidentes ou danos</strong> que ocorram fora da supervisão direta da plataforma, incluindo atividades físicas nas quadras.</p>
+    <p>Os usuários são responsáveis pelo uso adequado da plataforma e por respeitar normas de conduta dentro dos jogos.</p>
+  </div>
+
+  <div className="flex flex-col space-y-2">
+    <strong>4. Direitos dos Usuários (LGPD)</strong>
+    <p>Você tem direito de acessar, corrigir ou solicitar a exclusão de seus dados pessoais.</p>
+    <p>É garantido o direito de revogar consentimento para o uso de dados pessoais a qualquer momento, mediante contato com a empresa.</p>
+    <p>A Passa Bola adota medidas de segurança para proteger seus dados, mas não se responsabiliza por falhas externas ou uso indevido por terceiros fora de sua plataforma.</p>
+  </div>
+
+  <div className="flex flex-col space-y-2">
+    <strong>5. Limitação de Responsabilidade</strong>
+    <ul className="list-disc list-inside ml-4 space-y-1">
+      <li>Danos diretos, indiretos ou incidentais que possam ocorrer devido à participação nos jogos;</li>
+      <li>Perdas de dados causadas por mau uso, erros de dispositivo ou falhas externas;</li>
+      <li>Ações de terceiros fora do ambiente controlado pelo site.</li>
+    </ul>
+  </div>
+
+  <div className="flex flex-col space-y-2">
+    <strong>6. Modificações dos Termos</strong>
+    <p>A Passa Bola se reserva o direito de alterar estes termos a qualquer momento, sendo recomendável que os usuários consultem regularmente esta página. O uso contínuo da plataforma após alterações constitui aceitação dos novos termos.</p>
+  </div>
+
+  <div className="flex flex-col space-y-2">
+    <strong>7. Contato</strong>
+    <p>Para questões relacionadas à privacidade ou solicitação de direitos sobre seus dados, entre em contato conosco pelo email: <strong>contato@passabola.com.br</strong>.</p>
+  </div>
+</div></div>
             </div>
           </div>
         )}
