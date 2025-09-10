@@ -138,7 +138,7 @@ const NavHome = () => {
                 <img src={hero2} alt="Hero 2" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-6 text-center z-10">
                   <div className="bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl p-8 max-w-lg">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4 text-purple-500 drop-shadow-lg">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4  drop-shadow-lg text-blue-500">
                       Inscreva-se em nossos Jogos Mensais
                     </h2>
                     <p className="text-lg md:text-xl mb-6 text-white drop-shadow-md">
@@ -156,13 +156,16 @@ const NavHome = () => {
             <CarouselItem className="relative">
               <img src={hero3} alt="Hero 3" className="w-full h-screen object-cover" />
               <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-6 text-center bg-black/40">
-                <h2 className="text-3xl md:text-5xl font-bold mb-4">Confira os Resultados</h2>
+                <h2 className="text-3xl md:text-5xl font-bold mb-4 text-green-400">Confira os Resultados</h2>
                 <p className="text-lg md:text-xl mb-6">Veja os placares mais recentes e os próximos jogos</p>
-                <div className="flex gap-4">
-                  <Button className="bg-purple-700 hover:black/60 hover:border hover:border-white text-white px-6 py-3 rounded-xl shadow-lg">
+                <div className="flex gap-2">
+                  <Button className="bg-purple-700 hover:bg-black/60 hover:border hover:border-white text-white px-4 py-2 rounded-lg shadow-md text-sm">
                     Ver Resultados
                   </Button>
-                  <Button variant="outline" className="border-white text-white bg-white/10 px-6 py-3 rounded-xl">
+                  <Button
+                    variant="outline"
+                    className="border-white text-white bg-white/10 px-4 py-2 rounded-lg text-sm"
+                  >
                     Próximos Jogos
                   </Button>
                 </div>
@@ -173,14 +176,11 @@ const NavHome = () => {
             <CarouselItem className="relative">
               <img src={hero4} alt="Hero 4" className="w-full h-screen object-cover" />
               <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-6 text-center bg-black/40">
-                <h2 className="text-3xl md:text-5xl font-bold mb-4">Participe dos Campeonatos</h2>
+                <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#FCFF6E]">Participe dos Campeonatos</h2>
                 <p className="text-lg md:text-xl mb-6">Inscreva-se agora ou confira os torneios passados</p>
                 <div className="flex gap-4">
                   <Button className="bg-purple-700 hover:bg-black/60 hover:border hover:border-white text-white px-6 py-3 rounded-xl shadow-lg">
                     Inscrever-se
-                  </Button>
-                  <Button variant="outline" className="border-white text-white bg-white/10 px-6 py-3 rounded-xl">
-                    Ver campeonatos anteriores
                   </Button>
                 </div>
               </div>
