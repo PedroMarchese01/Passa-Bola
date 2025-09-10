@@ -68,6 +68,9 @@ const NavHome = () => {
             Contato
           </p>
           <p className="text-gray-300 hover:text-white transition-colors">
+            Jogos Mensais
+          </p>
+          <p className="text-gray-300 hover:text-white transition-colors">
             Campeonatos
           </p>
         </div>
@@ -96,8 +99,8 @@ const NavHome = () => {
           <p className="text-gray-300 hover:text-white transition-colors">
             Contato
           </p>
+          <p className="text-gray-300 hover:text-white transition-colors">Jogos Mensais</p>
           <p className="text-gray-300 hover:text-white transition-colors">Campeonatos</p>
-            
           
           <Button variant="outline" className="border-purple-700 text-purple-700 bg-transparent px-4 py-2 rounded-lg">
             Login
