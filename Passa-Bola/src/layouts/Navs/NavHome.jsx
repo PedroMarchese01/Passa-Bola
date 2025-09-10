@@ -138,7 +138,7 @@ const NavHome = () => {
                 <img src={hero2} alt="Hero 2" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-6 text-center z-10">
                   <div className="bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl p-8 max-w-lg">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4  drop-shadow-lg text-[#FF1E5E]">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4  drop-shadow-lg text-[#fc376f]">
                       Inscreva-se em nossos Jogos Mensais
                     </h2>
                     <p className="text-lg md:text-xl mb-6 text-white drop-shadow-md">
