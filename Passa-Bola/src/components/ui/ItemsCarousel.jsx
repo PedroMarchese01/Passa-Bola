@@ -14,9 +14,22 @@ const ItemsCarousel = ({ size, storageKey, textColor = "text-black", type }) => 
     dragFree: true
   })
 
-  useEffect(() => {
+  // Função para carregar itens do localStorage
+  const carregarItems = () => {
     const storedItems = JSON.parse(localStorage.getItem(storageKey)) || []
     setItems(storedItems)
+  }
+
+  // Carrega itens ao montar e adiciona listener para alterações
+  useEffect(() => {
+    carregarItems()
+
+    const handleStorageChange = () => {
+      carregarItems()
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
   }, [storageKey])
 
   const handleRemove = (index) => {
