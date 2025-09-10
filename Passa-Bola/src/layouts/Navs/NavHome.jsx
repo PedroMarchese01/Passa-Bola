@@ -12,6 +12,7 @@ import hero1 from "../../assets/hero1.jpg";
 import hero2 from "../../assets/hero2.jpg";
 import hero3 from "../../assets/hero3.png";
 import hero4 from "../../assets/hero4.png";
+import logo from "../../assets/logo.png"
 
 const NavHome = () => {
   const navigate = useNavigate();
@@ -55,9 +56,15 @@ const NavHome = () => {
           scrolled ? "bg-[#1c1c1c]/90 shadow-md backdrop-blur" : "bg-[#1c1c1c]"
         }`}
       >
-        <div>
-        <img src="" alt="" />
-        <span className="text-white font-bold text-xl cursor-pointer">Passa Bola</span>
+        <div className="flex justify-center items-center gap-4">
+          <div className="p-1 rounded-full bg-white">
+            <img 
+              src={logo} 
+              alt="imagem logo passa bola" 
+              className="h-4 sm:h-5 md:h-6 lg:h-7 w-auto object-contain drop-shadow-[0_0_10px_white]" 
+            />
+          </div>
+          <span className="text-white font-bold text-xl cursor-pointer">Passa Bola</span>
         </div>
 
         <div className="hidden md:flex gap-8">
