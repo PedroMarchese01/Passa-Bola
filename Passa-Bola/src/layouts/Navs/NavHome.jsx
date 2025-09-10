@@ -138,7 +138,7 @@ const NavHome = () => {
                 <img src={hero2} alt="Hero 2" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-6 text-center z-10">
                   <div className="bg-black/20 backdrop-blur-xl border border-white/20 rounded-2xl p-8 max-w-lg">
-                    <h2 className="text-3xl md:text-4xl font-bold mb-4  drop-shadow-lg text-blue-500">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-4  drop-shadow-lg text-[#FF1E5E]">
                       Inscreva-se em nossos Jogos Mensais
                     </h2>
                     <p className="text-lg md:text-xl mb-6 text-white drop-shadow-md">
@@ -156,7 +156,7 @@ const NavHome = () => {
             <CarouselItem className="relative">
               <img src={hero3} alt="Hero 3" className="w-full h-screen object-cover" />
               <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-6 text-center bg-black/40">
-                <h2 className="text-3xl md:text-5xl font-bold mb-4 text-green-400">Confira os Resultados</h2>
+                <h2 className="text-3xl md:text-5xl font-bold mb-4 text-[#76F55F]">Confira os Resultados</h2>
                 <p className="text-lg md:text-xl mb-6">Veja os placares mais recentes e os próximos jogos</p>
                 <div className="flex gap-2">
                   <Button className="bg-purple-700 hover:bg-black/60 hover:border hover:border-white text-white px-4 py-2 rounded-lg shadow-md text-sm">
