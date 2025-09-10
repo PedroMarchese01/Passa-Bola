@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import hero1 from '../../assets/hero1.jpg';
 import hero2 from '../../assets/hero2.jpg';
 
+import hero4 from '../../assets/hero4.png';
+
 const NavHome = () => {
   const navigate = useNavigate();
   const [alert, setAlert] = useState({ show: false, message: "", type: "error" });
@@ -100,12 +102,15 @@ const NavHome = () => {
             </CarouselItem>
 
             {/* Slide 4 */}
-            <CarouselItem className="relative">
-              <img src={hero1} alt="Hero 4" className="w-full h-screen object-cover" />
+   <CarouselItem className="relative">
+              <img src={hero4} alt="Hero 4" className="w-full h-screen object-cover" />
               <div className="absolute inset-0 flex justify-center items-center text-white p-4">
-                <p>Mais conteúdo</p>
+                <p>Conteúdo adicional</p>
               </div>
             </CarouselItem>
+
+
+
           </CarouselContent>
 
           {/* Setas */}
