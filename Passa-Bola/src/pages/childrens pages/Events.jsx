@@ -16,7 +16,9 @@ const Events = () => {
 
   useEffect(() => {
     const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
-    setEvents(storedEvents);
+    // garante que todos os eventos tenham a propriedade inscritos
+    const initialized = storedEvents.map(e => ({ ...e, inscritos: e.inscritos || [] }));
+    setEvents(initialized);
   }, []);
 
   const saveEvents = (updatedEvents) => {
@@ -29,7 +31,9 @@ const Events = () => {
 
     if (editingEvent) {
       const updatedEvents = events.map((e) =>
-        e.id === editingEvent.id ? { ...editingEvent, name, dateStart, dateEnd, location } : e
+        e.id === editingEvent.id
+          ? { ...editingEvent, name, dateStart, dateEnd, location }
+          : e
       );
       saveEvents(updatedEvents);
       setEditingEvent(null);
@@ -43,6 +47,7 @@ const Events = () => {
         type,
         name,
         location,
+        inscritos: [], // inicializa array de inscritos
         dateStart: type === "campeonato" ? dateStart : undefined,
         dateEnd: type === "campeonato" ? dateEnd : undefined,
         date: type === "mensal" ? dateStart : undefined,
@@ -50,7 +55,6 @@ const Events = () => {
       saveEvents([...events, newEvent]);
     }
 
-    // limpar form
     setName("");
     setDateStart("");
     setDateEnd("");
@@ -159,6 +163,7 @@ const Events = () => {
                   <p><strong>Local:</strong> {e.location}</p>
                   <p><strong>Início:</strong> {e.dateStart}</p>
                   <p><strong>Término:</strong> {e.dateEnd}</p>
+                  <p><strong>Participantes:</strong> {e.inscritos.length}</p>
                   <div className="flex gap-2 mt-2">
                     <Button onClick={() => handleEditEvent(e)}>Editar</Button>
                     <Button className="bg-red-500 hover:bg-red-600" onClick={() => handleRemoveEvent(e.id)}>Remover</Button>
@@ -178,6 +183,7 @@ const Events = () => {
                   <p><strong>Nome:</strong> {e.name}</p>
                   <p><strong>Local:</strong> {e.location}</p>
                   <p><strong>Data:</strong> {e.date}</p>
+                  <p><strong>Participantes:</strong> {e.inscritos.length}</p>
                   <div className="flex gap-2 mt-2">
                     <Button onClick={() => handleEditEvent(e)}>Editar</Button>
                     <Button className="bg-red-500 hover:bg-red-600" onClick={() => handleRemoveEvent(e.id)}>Remover</Button>

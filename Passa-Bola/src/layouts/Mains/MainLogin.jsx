@@ -78,15 +78,15 @@ const MainLogin = () => {
 
     if (userExist) {
       setError(null);
-      localStorage.setItem("users", JSON.stringify(users));
+
+      // SALVA USUÁRIO LOGADO
+      localStorage.setItem("loggedUser", JSON.stringify(userExist));
+      localStorage.setItem("logged?", true);
 
       if (userExist.admin) {
-        localStorage.setItem("logged?" , true)
         navigate("/adminControlPainel");
       } else {
-        localStorage.setItem("logged?" , true)
         navigate("/");
-        
       }
     } else {
       setError({

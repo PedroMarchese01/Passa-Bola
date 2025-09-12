@@ -99,6 +99,7 @@ const HomePassaBola = () => {
                     className="flex items-center gap-2 w-full text-left"
                     onClick={() => {
                       localStorage.setItem("logged?", "false");
+                      localStorage.removeItem("loggedUser");
                       navigate("/");
                     }}
                   >
