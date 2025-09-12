@@ -15,8 +15,8 @@ const MainSobre = () => {
           Sobre Nós
         </h1>
 
-        {/* Grid de cards */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-9">
+        {/* Grid de cards responsivo */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-9">
           
           {/* Card Missão */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition">
@@ -45,7 +45,7 @@ const MainSobre = () => {
           </div>
 
           {/* Card Time */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition col-span-2 lg:col-span-1">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition">
             <h2 className="text-xl font-semibold text-purple-400">Nosso Time</h2>
             <div className="mt-4 flex flex-col gap-4">
               <div className="flex items-center gap-3">
@@ -57,7 +57,6 @@ const MainSobre = () => {
                 <div>
                   <p className="text-white font-semibold">Enzo Augusto</p>
                   <p className="text-gray-300 text-xs">Fundador</p>
-                  
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -75,7 +74,7 @@ const MainSobre = () => {
           </div>
 
           {/* Card Contato */}
-          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition col-span-2 lg:col-span-2">
+          <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition md:col-span-2">
             <h2 className="text-xl font-semibold text-purple-400">Contato</h2>
             <p className="mt-2 text-gray-200 text-sm">📧 contato@passabola.com</p>
             <p className="text-gray-200 text-sm">📱 (11) 99999-9999</p>
