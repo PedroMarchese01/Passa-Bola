@@ -1,4 +1,3 @@
-import ItemsCarousel from '@/components/ui/ItemsCarousel'
 import React from 'react'
 const MainHome = () => {
   return (
