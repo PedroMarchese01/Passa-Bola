@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import useEmblaCarousel from 'embla-carousel-react'
-import { CarouselContent, CarouselItem } from '@/components/ui/carousel'
 import { Button } from './button'
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react'
 
-const ItemsCarousel = ({ size, storageKey, textColor = "text-black", type }) => {
+const ItemsCarousel = ({ size = 3, storageKey, textColor = "text-black", type }) => {
   const [items, setItems] = useState([])
   const [emblaRef, embla] = useEmblaCarousel({ 
     loop: true, 
@@ -14,20 +13,15 @@ const ItemsCarousel = ({ size, storageKey, textColor = "text-black", type }) => 
     dragFree: true
   })
 
-  // Função para carregar itens do localStorage
+  // Carrega itens do localStorage
   const carregarItems = () => {
     const storedItems = JSON.parse(localStorage.getItem(storageKey)) || []
     setItems(storedItems)
   }
 
-  // Carrega itens ao montar e adiciona listener para alterações
   useEffect(() => {
     carregarItems()
-
-    const handleStorageChange = () => {
-      carregarItems()
-    }
-
+    const handleStorageChange = () => carregarItems()
     window.addEventListener('storage', handleStorageChange)
     return () => window.removeEventListener('storage', handleStorageChange)
   }, [storageKey])
@@ -45,6 +39,7 @@ const ItemsCarousel = ({ size, storageKey, textColor = "text-black", type }) => 
 
   return (
     <div className="relative w-full">
+      {/* Botão esquerdo */}
       <button
         onClick={scrollPrev}
         className="absolute top-1/2 left-2 sm:left-4 md:left-6 transform -translate-y-1/2 w-10 h-10 flex justify-center items-center rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors z-20"
@@ -52,13 +47,14 @@ const ItemsCarousel = ({ size, storageKey, textColor = "text-black", type }) => 
         <ChevronLeftIcon size={24} />
       </button>
 
-      <div ref={emblaRef} className="overflow-hidden">
-        <div className="flex gap-4">
+      {/* Carousel */}
+      <div ref={emblaRef} className="overflow-hidden w-full">
+        <div className="flex" style={{ gap: '1rem' }}>
           {items.map((item, index) => (
             <div
               key={item.id || index}
-              className={`flex-none p-2`}
-              style={{ flex: `0 0 calc(100% / ${size} - 0.8rem)` }}
+              className="flex-none"
+              style={{ flex: `0 0 ${100 / size}%` }} // Cada item ocupa 100%/size
             >
               <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-4 flex flex-col gap-2 shadow-lg hover:bg-white/20 transition-colors">
                 {Object.entries(item)
@@ -80,6 +76,7 @@ const ItemsCarousel = ({ size, storageKey, textColor = "text-black", type }) => 
         </div>
       </div>
 
+      {/* Botão direito */}
       <button
         onClick={scrollNext}
         className="absolute top-1/2 right-2 sm:right-4 md:right-6 transform -translate-y-1/2 w-10 h-10 flex justify-center items-center rounded-full bg-white/10 backdrop-blur-md text-white hover:bg-white/20 transition-colors z-20"
