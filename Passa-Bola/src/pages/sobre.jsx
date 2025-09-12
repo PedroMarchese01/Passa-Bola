@@ -1,13 +1,18 @@
-import NavSobre from '@/layouts/Navs/NavSobre'
+import NavSobre from '@/layouts/Navs/NavChildren'
+import MainSobre from '@/layouts/Mains/MainSobre'
 import React from 'react'
 
-const sobre = () => {
+
+
+const Sobre = () => {
   return (
-    <div>
-        <NavSobre/>
-        
-    </div>
+ 
+        <div>
+            <MainSobre/>
+            <NavSobre/>
+        </div>
+    
   )
 }
 
-export default sobre
+export default Sobre
