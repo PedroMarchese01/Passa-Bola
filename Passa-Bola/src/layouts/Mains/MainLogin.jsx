@@ -82,7 +82,7 @@ const MainLogin = () => {
 
       if (userExist.admin) {
         localStorage.setItem("logged?" , true)
-        navigate("/adminControl");
+        navigate("/adminControlPainel");
       } else {
         localStorage.setItem("logged?" , true)
         navigate("/");
