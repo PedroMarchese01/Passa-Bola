@@ -1,5 +1,5 @@
 import React from "react";
-import bgImg from "../../assets/hero10.png"; // fundo de contato
+import bgImg from "../../assets/hero12.png"; // fundo de contato
 
 const MainContato = () => {
   return (
@@ -24,7 +24,7 @@ const MainContato = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           
           {/* Informações da empresa */}
-          <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md border border-white/10">
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md border border-gray-700/30">
             <h2 className="text-2xl font-semibold text-purple-400 mb-6">
               Nossos Dados
             </h2>
@@ -65,7 +65,7 @@ const MainContato = () => {
           </div>
 
           {/* Formulário de contato */}
-          <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md border border-white/10">
+          <div className="bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md border border-gray-700/30">
             <h2 className="text-2xl font-semibold text-purple-400 mb-6">
               Envie uma mensagem
             </h2>
