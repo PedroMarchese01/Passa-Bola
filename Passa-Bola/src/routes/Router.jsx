@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "../pages/Home";
 import Login from "../pages/Login";
 import HomePassaBola from "@/pages/HomePassaBola";
+import Campeonatos from "@/pages/Campeonatos"; 
 import Analytics from "@/pages/childrens pages/Analytics";
 import Events from "@/pages/childrens pages/Events"
 import Admin from "@/pages/childrens pages/Admin";
@@ -15,6 +16,10 @@ const Router = createBrowserRouter([
   {
     path: "/login",
     element: <Login/>
+  },
+   {
+    path: "/campeonatos",      
+    element: <Campeonatos />,
   },
   {
     path:"/adminControlPainel",
