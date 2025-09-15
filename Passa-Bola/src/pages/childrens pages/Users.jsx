@@ -1,277 +1,227 @@
-import React, { useState, useEffect } from "react";
+"use client";
+import React, { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash, Save, X } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-const Users = () => {
-  const [usuarios, setUsuarios] = useState([]);
-  const [admins, setAdmins] = useState([]);
-  const [busca, setBusca] = useState("");
-  const [editando, setEditando] = useState({ tipo: null, index: null });
+const UsersAdminPanel = () => {
+  const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
+  const [editingIndex, setEditingIndex] = useState(null);
+  const editRef = useRef(null);
 
-  // Carrega do localStorage
   useEffect(() => {
-    const armazenadosUsuarios = JSON.parse(localStorage.getItem("users")) || [];
-    const armazenadosAdmins = JSON.parse(localStorage.getItem("admins")) || [];
-    setUsuarios(armazenadosUsuarios);
-    setAdmins(armazenadosAdmins);
+    const storedUsers = JSON.parse(localStorage.getItem("users")) || [];
+    const fixedUsers = storedUsers.map((u) => ({
+      ...u,
+      nome: u.nome || u.usuario || "",
+    }));
+    setUsers(fixedUsers);
   }, []);
 
-  // Filtragem por nome/usuário OU email
-  const filtradosUsuarios = usuarios.filter(
-    (u) =>
-      u.usuario?.toLowerCase().includes(busca.toLowerCase()) ||
-      u.email?.toLowerCase().includes(busca.toLowerCase())
+  const saveLocal = (data) => localStorage.setItem("users", JSON.stringify(data));
+
+  const deleteUser = (index) => {
+    const updated = [...users];
+    updated.splice(index, 1);
+    setUsers(updated);
+    saveLocal(updated);
+    if (editingIndex === index) cancelEdit();
+  };
+
+  const startEdit = (index) => setEditingIndex(index);
+  const cancelEdit = () => setEditingIndex(null);
+
+  const saveEdit = (index, updatedItem) => {
+    const updated = [...users];
+    updated[index] = updatedItem;
+    setUsers(updated);
+    saveLocal(updated);
+    cancelEdit();
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (editRef.current && !editRef.current.contains(e.target)) cancelEdit();
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const filterData = (list) =>
+    list.filter((item) =>
+      Object.values(item).some((val) => String(val).toLowerCase().includes(search.toLowerCase()))
+    );
+
+  const normalUsers = filterData(users)
+    .map((user) => ({ ...user, _realIndex: users.indexOf(user) }))
+    .filter((u) => !u.admin);
+
+  const admins = filterData(users)
+    .map((user) => ({ ...user, _realIndex: users.indexOf(user) }))
+    .filter((u) => u.admin);
+
+  // Tabela para desktop
+  const renderTable = (list, isAdminTable = false) => (
+    <div className="hidden md:block overflow-hidden rounded-lg shadow-lg">
+      <Table className="min-w-full bg-[#1f1f1f] border border-gray-700 rounded-lg">
+        <TableHeader>
+          <TableRow className="bg-[#2a2a2a]">
+            <TableHead className="text-white px-4 py-2">Nome</TableHead>
+            <TableHead className="text-white px-4 py-2">Email</TableHead>
+            <TableHead className="text-white px-4 py-2">CPF</TableHead>
+            <TableHead className="text-white px-4 py-2">Telefone</TableHead>
+            <TableHead className="text-white px-4 py-2">Data Nasc.</TableHead>
+            <TableHead className="text-white px-4 py-2 text-center">Admin</TableHead>
+            <TableHead className="text-white px-4 py-2">Ações</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {list.map((user) => {
+            const realIndex = user._realIndex;
+            const isEditing = editingIndex === realIndex;
+            return (
+              <TableRow
+                key={realIndex}
+                className={`transition-colors ${
+                  isAdminTable
+                    ? "bg-[#3c2cc3] bg-opacity-20 hover:bg-[#5b3ce2] hover:bg-opacity-30"
+                    : "hover:bg-[#5b3ce2] hover:bg-opacity-20"
+                }`}
+              >
+                {["nome", "email", "cpf", "telefone", "date"].map((field, i) => (
+                  <TableCell key={i} className="text-white px-4 py-2">
+                    {isEditing ? (
+                      <Input
+                        ref={editRef}
+                        autoFocus
+                        value={user[field] || ""}
+                        onChange={(e) => {
+                          const updated = [...users];
+                          updated[realIndex][field] = e.target.value;
+                          setUsers(updated);
+                        }}
+                        onKeyDown={(e) => e.key === "Escape" && cancelEdit()}
+                        className="bg-[#2c2c2c] text-white"
+                      />
+                    ) : (
+                      user[field] || ""
+                    )}
+                  </TableCell>
+                ))}
+                <TableCell className="text-white px-4 py-2 text-center">{user.admin ? "Sim" : "Não"}</TableCell>
+                <TableCell className="flex gap-2 px-4 py-2">
+                  {isEditing ? (
+                    <>
+                      <Button variant="ghost" className="text-white hover:text-[#9b59b6]" onClick={() => saveEdit(realIndex, users[realIndex])}>
+                        <Save />
+                      </Button>
+                      <Button variant="ghost" className="text-white hover:text-[#e74c3c]" onClick={cancelEdit}>
+                        <X />
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="ghost" className="text-white hover:text-[#9b59b6]" onClick={() => startEdit(realIndex)}>
+                        <Edit />
+                      </Button>
+                      <Button variant="ghost" className="text-white hover:text-[#e74c3c]" onClick={() => deleteUser(realIndex)}>
+                        <Trash />
+                      </Button>
+                    </>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 
-  const filtradosAdmins = admins.filter(
-    (a) =>
-      a.usuario?.toLowerCase().includes(busca.toLowerCase()) ||
-      a.email?.toLowerCase().includes(busca.toLowerCase())
+  // Cards para mobile
+  const renderCards = (list, isAdminTable = false) => (
+    <div className="md:hidden grid gap-4">
+      {list.map((user) => {
+        const realIndex = user._realIndex;
+        const isEditing = editingIndex === realIndex;
+        return (
+          <div key={realIndex} className="bg-[#1f1f1f] p-4 rounded-lg shadow hover:shadow-lg transition">
+            {["nome", "email", "cpf", "telefone", "date"].map((field) => (
+              <div key={field} className="flex justify-between mb-2">
+                <span className="text-gray-400 capitalize">{field.replace("date", "Data Nasc.")}:</span>
+                {isEditing ? (
+                  <Input
+                    ref={editRef}
+                    autoFocus={field === "nome"}
+                    value={user[field] || ""}
+                    onChange={(e) => {
+                      const updated = [...users];
+                      updated[realIndex][field] = e.target.value;
+                      setUsers(updated);
+                    }}
+                    onKeyDown={(e) => e.key === "Escape" && cancelEdit()}
+                    className="bg-[#2c2c2c] text-white w-1/2"
+                  />
+                ) : (
+                  <span className="text-white">{user[field] || ""}</span>
+                )}
+              </div>
+            ))}
+            <div className="flex justify-between mb-2">
+              <span className="text-gray-400">Admin:</span>
+              <span className="text-white">{user.admin ? "Sim" : "Não"}</span>
+            </div>
+            <div className="flex gap-2 justify-end">
+              {isEditing ? (
+                <>
+                  <Button variant="ghost" className="text-white hover:text-[#9b59b6]" onClick={() => saveEdit(realIndex, users[realIndex])}>
+                    <Save />
+                  </Button>
+                  <Button variant="ghost" className="text-white hover:text-[#e74c3c]" onClick={cancelEdit}>
+                    <X />
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button variant="ghost" className="text-white hover:text-[#9b59b6]" onClick={() => startEdit(realIndex)}>
+                    <Edit />
+                  </Button>
+                  <Button variant="ghost" className="text-white hover:text-[#e74c3c]" onClick={() => deleteUser(realIndex)}>
+                    <Trash />
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
   );
-
-  // Salvar no localStorage
-  const salvarLocal = (tipo, data) => {
-    localStorage.setItem(tipo, JSON.stringify(data));
-  };
-
-  // Excluir admin
-  const handleDeletarAdmin = (usuario) => {
-    const atualizados = admins.filter((a) => a.usuario !== usuario);
-    setAdmins(atualizados);
-    salvarLocal("admins", atualizados);
-  };
-
-  // Excluir usuária
-  const handleDeletarUsuario = (usuario) => {
-    const atualizados = usuarios.filter((u) => u.usuario !== usuario);
-    setUsuarios(atualizados);
-    salvarLocal("users", atualizados);
-  };
-
-  // Iniciar edição
-  const handleEditar = (tipo, index) => {
-    setEditando({ tipo, index });
-  };
-
-  // Cancelar edição
-  const handleCancelar = () => {
-    setEditando({ tipo: null, index: null });
-  };
-
-  // Salvar edição
-  const handleSalvar = (tipo, index, novoValor) => {
-    if (tipo === "admins") {
-      const atualizados = [...admins];
-      atualizados[index] = novoValor;
-      setAdmins(atualizados);
-      salvarLocal("admins", atualizados);
-    } else {
-      const atualizados = [...usuarios];
-      atualizados[index] = novoValor;
-      setUsuarios(atualizados);
-      salvarLocal("users", atualizados);
-    }
-    setEditando({ tipo: null, index: null });
-  };
 
   return (
-    <div className="h-screen w-screen bg-[#1c1c1c] flex flex-col items-center p-6 overflow-y-auto">
-      <h1 className="text-2xl font-bold text-white mb-6">Usuárias e Administradoras</h1>
+    <div className="p-6 bg-[#121212] min-h-screen sm:p-4">
+      <h1 className="text-2xl font-bold text-white mb-6 text-center sm:text-left">
+        Painel de Usuários e Administradores
+      </h1>
 
-      {/* Campo de busca */}
       <Input
-        placeholder="Pesquisar por nome de usuário ou email..."
-        value={busca}
-        onChange={(e) => setBusca(e.target.value)}
-        className="bg-[#2c2c2c] text-white placeholder-gray-400 max-w-md mb-6"
+        placeholder="Pesquisar por qualquer dado..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="mb-6 w-full sm:max-w-md bg-[#2c2c2c] text-white placeholder-gray-400"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-5xl">
-        {/* Card de Usuárias */}
-        <div className="bg-[#2c2c2c] p-6 rounded-2xl border border-gray-700 shadow-lg">
-          <h2 className="text-xl font-semibold text-white mb-4">Usuárias Cadastradas</h2>
-          <div className="flex flex-col gap-3">
-            {filtradosUsuarios.length > 0 ? (
-              filtradosUsuarios.map((u, idx) => {
-                const indexOriginal = usuarios.findIndex((x) => x.usuario === u.usuario);
-                const editandoEste = editando.tipo === "usuarios" && editando.index === indexOriginal;
+      <h2 className="text-xl font-semibold text-white mb-2">Administradores</h2>
+      {renderTable(admins, true)}
+      {renderCards(admins, true)}
 
-                return (
-                  <div
-                    key={idx}
-                    className="bg-[#1c1c1c] p-4 rounded-xl flex justify-between items-center border border-gray-700"
-                  >
-                    {editandoEste ? (
-                      <div className="flex flex-col flex-1 mr-3">
-                        <Input
-                          value={u.usuario}
-                          onChange={(e) => {
-                            const atualizado = [...usuarios];
-                            atualizado[indexOriginal].usuario = e.target.value;
-                            setUsuarios(atualizado);
-                          }}
-                          className="bg-[#2c2c2c] text-white mb-2"
-                        />
-                        <Input
-                          value={u.email}
-                          onChange={(e) => {
-                            const atualizado = [...usuarios];
-                            atualizado[indexOriginal].email = e.target.value;
-                            setUsuarios(atualizado);
-                          }}
-                          className="bg-[#2c2c2c] text-white"
-                        />
-                      </div>
-                    ) : (
-                      <div className="flex flex-col">
-                        <span className="text-white">{u.usuario}</span>
-                        <span className="text-gray-400 text-sm">{u.email}</span>
-                      </div>
-                    )}
-                    <div className="flex gap-3">
-                      {editandoEste ? (
-                        <>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-white hover:text-purple-500 hover:bg-white/10"
-                            onClick={() => handleSalvar("usuarios", indexOriginal, u)}
-                          >
-                            <Save className="w-5 h-5" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-white hover:text-purple-500 hover:bg-white/10"
-                            onClick={handleCancelar}
-                          >
-                            <X className="w-5 h-5" />
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-white hover:text-purple-500 hover:bg-white/10"
-                            onClick={() => handleEditar("usuarios", indexOriginal)}
-                          >
-                            <Edit className="w-5 h-5" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-white hover:text-purple-500 hover:bg-white/10"
-                            onClick={() => handleDeletarUsuario(u.usuario)}
-                          >
-                            <Trash className="w-5 h-5" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p className="text-gray-400">Nenhuma usuária encontrada.</p>
-            )}
-          </div>
-        </div>
-
-        {/* Card de Administradoras */}
-        <div className="bg-[#2c2c2c] p-6 rounded-2xl border border-gray-700 shadow-lg">
-          <h2 className="text-xl font-semibold text-white mb-4">Administradoras Cadastradas</h2>
-          <div className="flex flex-col gap-3">
-            {filtradosAdmins.length > 0 ? (
-              filtradosAdmins.map((a, idx) => {
-                const indexOriginal = admins.findIndex((x) => x.usuario === a.usuario);
-                const editandoEste = editando.tipo === "admins" && editando.index === indexOriginal;
-
-                return (
-                  <div
-                    key={idx}
-                    className="bg-[#1c1c1c] p-4 rounded-xl flex justify-between items-center border border-gray-700"
-                  >
-                    {editandoEste ? (
-                      <div className="flex flex-col flex-1 mr-3">
-                        <Input
-                          value={a.usuario}
-                          onChange={(e) => {
-                            const atualizado = [...admins];
-                            atualizado[indexOriginal].usuario = e.target.value;
-                            setAdmins(atualizado);
-                          }}
-                          className="bg-[#2c2c2c] text-white mb-2"
-                        />
-                        <Input
-                          value={a.email}
-                          onChange={(e) => {
-                            const atualizado = [...admins];
-                            atualizado[indexOriginal].email = e.target.value;
-                            setAdmins(atualizado);
-                          }}
-                          className="bg-[#2c2c2c] text-white"
-                        />
-                      </div>
-                    ) : (
-                      <div className="flex flex-col">
-                        <span className="text-white">{a.usuario}</span>
-                        <span className="text-gray-400 text-sm">{a.email}</span>
-                      </div>
-                    )}
-                    <div className="flex gap-3">
-                      {editandoEste ? (
-                        <>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-white hover:text-purple-500 hover:bg-white/10"
-                            onClick={() => handleSalvar("admins", indexOriginal, a)}
-                          >
-                            <Save className="w-5 h-5" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-white hover:text-purple-500 hover:bg-white/10"
-                            onClick={handleCancelar}
-                          >
-                            <X className="w-5 h-5" />
-                          </Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-white hover:text-purple-500 hover:bg-white/10"
-                            onClick={() => handleEditar("admins", indexOriginal)}
-                          >
-                            <Edit className="w-5 h-5" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="text-white hover:text-purple-500 hover:bg-white/10"
-                            onClick={() => handleDeletarAdmin(a.usuario)}
-                          >
-                            <Trash className="w-5 h-5" />
-                          </Button>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p className="text-gray-400">Nenhuma administradora encontrada.</p>
-            )}
-          </div>
-        </div>
-      </div>
+      <h2 className="text-xl font-semibold text-white mb-2">Usuários</h2>
+      {renderTable(normalUsers)}
+      {renderCards(normalUsers)}
     </div>
   );
 };
 
-export default Users;
+export default UsersAdminPanel;

@@ -23,10 +23,23 @@ const CadastroAdministradora = () => {
       return;
     }
 
-    const novaAdmin = { usuario, email, senha };
-    const adminsExistentes = JSON.parse(localStorage.getItem("admins")) || [];
-    localStorage.setItem("admins", JSON.stringify([...adminsExistentes, novaAdmin]));
+    // 🔹 Pega os usuários do localStorage
+    const usersExistentes = JSON.parse(localStorage.getItem("users")) || [];
 
+    // 🔹 Verifica se já existe um usuário com o mesmo email
+    const emailExistente = usersExistentes.find(user => user.email === email);
+    if (emailExistente) {
+      setAlert({ title: "Erro", description: "Já existe um usuário cadastrado com esse email." });
+      return;
+    }
+
+    // 🔹 Cria nova administradora
+    const novaAdmin = { usuario, email, senha, admin: true };
+
+    // 🔹 Salva na lista de usuários
+    localStorage.setItem("users", JSON.stringify([...usersExistentes, novaAdmin]));
+
+    // 🔹 Reseta campos e mostra alerta de sucesso
     setUsuario("");
     setEmail("");
     setSenha("");
@@ -34,37 +47,35 @@ const CadastroAdministradora = () => {
   };
 
   return (
-    <div className="h-screen w-screen bg-[#1c1c1c] flex justify-center items-center p-4">
-      <div className="bg-[#2c2c2c] w-full max-w-md h-full sm:h-auto p-8 rounded-2xl border border-gray-700 flex flex-col gap-6 shadow-lg">
-        {alert && (
-          <Alert className="transition-all duration-300">
-            <AlertTitle>{alert.title}</AlertTitle>
-            <AlertDescription>{alert.description}</AlertDescription>
-          </Alert>
-        )}
+    <div className="h-screen w-screen bg-[#1c1c1c] text-white flex flex-col items-center justify-center gap-6 p-8">
+      {alert && (
+        <Alert className="transition-all duration-300 w-full max-w-lg">
+          <AlertTitle>{alert.title}</AlertTitle>
+          <AlertDescription>{alert.description}</AlertDescription>
+        </Alert>
+      )}
 
-        <h1 className="text-2xl font-bold text-center text-white">
-          Cadastro de Administradora
-        </h1>
+      <h1 className="text-3xl font-bold text-center">Cadastro de Administradora</h1>
 
+      <div className="w-full max-w-lg flex flex-col gap-4">
         <Input
           placeholder="Usuário"
           value={usuario}
           onChange={(e) => setUsuario(e.target.value)}
-          className="bg-[#1c1c1c] text-white placeholder-gray-400"
+          className="bg-[#2c2c2c] text-white placeholder-gray-400"
         />
         <Input
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="bg-[#1c1c1c] text-white placeholder-gray-400"
+          className="bg-[#2c2c2c] text-white placeholder-gray-400"
         />
         <Input
           type="password"
           placeholder="Senha"
           value={senha}
           onChange={(e) => setSenha(e.target.value)}
-          className="bg-[#1c1c1c] text-white placeholder-gray-400"
+          className="bg-[#2c2c2c] text-white placeholder-gray-400"
         />
 
         <Button
