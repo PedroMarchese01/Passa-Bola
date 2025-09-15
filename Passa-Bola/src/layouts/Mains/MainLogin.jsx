@@ -302,6 +302,7 @@ const MainLogin = () => {
                 }
                 value={cadastro.telefone}
               />
+              <p className="text-white flex justify-center">Insira a data de nascimento abaixo</p>
               <Input
                 placeholder="Data de nascimento"
                 type="date"
