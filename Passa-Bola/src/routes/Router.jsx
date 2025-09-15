@@ -6,6 +6,7 @@ import Analytics from "@/pages/childrens pages/Analytics";
 import Events from "@/pages/childrens pages/Events"
 import Admin from "@/pages/childrens pages/Admin";
 import Users from "@/pages/childrens pages/Users"
+import Clima from "@/pages/childrens pages/Clima";
 const Router = createBrowserRouter([
   {
     path: "/",
@@ -34,6 +35,10 @@ const Router = createBrowserRouter([
       {
         path: "usuarios",
         element: <Users/>,
+      },
+      {
+        path: "clima",
+        element: <Clima/>
       }
     ]
   }

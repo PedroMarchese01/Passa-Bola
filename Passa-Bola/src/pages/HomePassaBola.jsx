@@ -13,7 +13,7 @@ import {
   SidebarMenuSub,
   SidebarInset
 } from "@/components/ui/sidebar";
-import { Home, Settings, Users, UserPlus, LogOut } from "lucide-react";
+import { Home, Settings, Users, UserPlus, LogOut, CloudSun } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const HomePassaBola = () => {
@@ -90,6 +90,14 @@ const HomePassaBola = () => {
                     </SidebarMenuItem>
                   </SidebarMenuSub>
                 )}
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <Link to = "clima">
+                <SidebarMenuButton className="flex items-center gap-2 text-white hover:bg-purple-500">
+                  <CloudSun className="size-4" />   
+                  <span>Clima Tempo</span>
+                </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
 
               {/* Encerrar sessão */}
