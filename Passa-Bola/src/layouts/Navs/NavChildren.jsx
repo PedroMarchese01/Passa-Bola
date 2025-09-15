@@ -3,13 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "../../assets/logo.png";
 
-
 const NavSobre = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
+    // sempre checa se o usuário está logado
+    const logged = localStorage.getItem("logged?") === "true";
+    setIsLogged(logged);
+
     const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
@@ -53,15 +57,26 @@ const NavSobre = () => {
           </p>
         </div>
 
-        {/* Botão Login */}
-        <div className="hidden md:flex gap-4">
-          <Button
-            variant="outline"
-            className="border-purple-700 text-purple-700 bg-transparent px-4 py-2 rounded-lg"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </Button>
+        {/* Login / Avatar */}
+        <div className="hidden md:flex gap-4 items-center">
+          {!isLogged ? (
+            <Button
+              variant="outline"
+              className="border-purple-700 text-purple-700 bg-transparent px-4 py-2 rounded-lg"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </Button>
+          ) : (
+            <div
+              className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold cursor-pointer hover:opacity-80"
+              title="Minha conta"
+              onClick={() => navigate("/perfil")}
+            >
+              {/* Pode trocar por uma foto real depois */}
+              EU
+            </div>
+          )}
         </div>
 
         {/* Menu Mobile */}
@@ -89,13 +104,22 @@ const NavSobre = () => {
             Campeonatos
           </p>
 
-          <Button
-            variant="outline"
-            className="border-purple-700 text-purple-700 bg-transparent px-4 py-2 rounded-lg"
-            onClick={() => navigate("/login")}
-          >
-            Login
-          </Button>
+          {!isLogged ? (
+            <Button
+              variant="outline"
+              className="border-purple-700 text-purple-700 bg-transparent px-4 py-2 rounded-lg"
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </Button>
+          ) : (
+            <div
+              className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold cursor-pointer hover:opacity-80"
+              onClick={() => navigate("/perfil")}
+            >
+              EU
+            </div>
+          )}
         </div>
       )}
     </>
