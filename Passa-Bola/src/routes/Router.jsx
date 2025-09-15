@@ -58,7 +58,7 @@ const Router = createBrowserRouter([
     element: <Contato/>
   },
   {
-    path: "/jogos",
+    path: "/jogos-mensais",
     element: <Jogos/>
   }
   
