@@ -13,6 +13,7 @@ import Jogos from "../pages/Jogos";
 
 
 
+import Clima from "@/pages/childrens pages/Clima";
 const Router = createBrowserRouter([
   {
     path: "/",
@@ -41,6 +42,10 @@ const Router = createBrowserRouter([
       {
         path: "usuarios",
         element: <Users/>,
+      },
+      {
+        path: "clima",
+        element: <Clima/>
       }
     ]
   },
