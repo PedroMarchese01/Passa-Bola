@@ -26,7 +26,7 @@ const MainLogin = () => {
     telefone: "",
     date: "",
   });
-  const [mostrarC, setMostrarC] = useState(false);
+  const [mostrarC, setMostrarC] = useState(false); // ✅ para mostrar senha cadastro
   const [cadastroMsg, setCadastroMsg] = useState(null);
 
   const [openModal, setOpenModal] = useState(false);
@@ -40,11 +40,10 @@ const MainLogin = () => {
   const validarCPF = (cpf) => {
     let numeros = "";
     for (let i = 0; i < cpf.length; i++) {
-      if (cpf[i] >= "0" && cpf[i] <= "9") {
-        numeros += cpf[i];
-      }
+      if (cpf[i] >= "0" && cpf[i] <= "9") numeros += cpf[i];
     }
     if (numeros.length !== 11) return false;
+
     let repetido = true;
     for (let i = 1; i < numeros.length; i++) {
       if (numeros[i] !== numeros[0]) {
@@ -53,16 +52,19 @@ const MainLogin = () => {
       }
     }
     if (repetido) return false;
+
     let soma = 0;
     for (let i = 0; i < 9; i++) soma += parseInt(numeros[i]) * (10 - i);
     let resto = (soma * 10) % 11;
     if (resto === 10) resto = 0;
     if (resto !== parseInt(numeros[9])) return false;
+
     soma = 0;
     for (let i = 0; i < 10; i++) soma += parseInt(numeros[i]) * (11 - i);
     resto = (soma * 10) % 11;
     if (resto === 10) resto = 0;
     if (resto !== parseInt(numeros[10])) return false;
+
     return true;
   };
 
@@ -139,9 +141,7 @@ const MainLogin = () => {
 
     let numeros = "";
     for (let i = 0; i < telefone.length; i++) {
-      if (telefone[i] >= "0" && telefone[i] <= "9") {
-        numeros += telefone[i];
-      }
+      if (telefone[i] >= "0" && telefone[i] <= "9") numeros += telefone[i];
     }
 
     if (numeros.length < 11) {
@@ -166,6 +166,18 @@ const MainLogin = () => {
       title: "Sucesso",
       description: "Cadastro realizado com sucesso!",
     });
+
+    // Limpar campos
+    setCadastro({
+      nome: "",
+      email: "",
+      senha: "",
+      confirmS: "",
+      cpf: "",
+      telefone: "",
+      date: "",
+    });
+    setAceitouTermos(false);
   };
 
   return (
@@ -187,11 +199,9 @@ const MainLogin = () => {
             </TabsTrigger>
           </TabsList>
 
+          {/* ================= LOGIN ================= */}
           <TabsContent value="Login" className="flex flex-col gap-4">
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={(e) => e.preventDefault()}
-            >
+            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
               <Input
                 placeholder="Email"
                 type="email"
@@ -240,10 +250,7 @@ const MainLogin = () => {
             </form>
 
             {error && (
-              <Alert
-                variant="destructive"
-                className="mt-4 border-4 border-red-700"
-              >
+              <Alert variant="destructive" className="mt-4 border-4 border-red-700">
                 <Terminal />
                 <AlertTitle>{error.title}</AlertTitle>
                 <AlertDescription>{error.description}</AlertDescription>
@@ -251,11 +258,9 @@ const MainLogin = () => {
             )}
           </TabsContent>
 
+          {/* ================= CADASTRO ================= */}
           <TabsContent value="Cadastro" className="flex flex-col gap-4">
-            <form
-              className="flex flex-col gap-4"
-              onSubmit={(e) => e.preventDefault()}
-            >
+            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
               <Input
                 placeholder="Nome Completo"
                 className="text-white"
@@ -270,6 +275,8 @@ const MainLogin = () => {
                 onChange={(e) => handleCadastroChange("email", e.target.value)}
                 value={cadastro.email}
               />
+
+              {/* Senha */}
               <Input
                 placeholder="Senha"
                 type={mostrarC ? "text" : "password"}
@@ -283,11 +290,22 @@ const MainLogin = () => {
                 type={mostrarC ? "text" : "password"}
                 className="text-white w-full"
                 autoComplete="new-password"
-                onChange={(e) =>
-                  handleCadastroChange("confirmS", e.target.value)
-                }
+                onChange={(e) => handleCadastroChange("confirmS", e.target.value)}
                 value={cadastro.confirmS}
               />
+
+              {/* Checkbox para mostrar senha */}
+              <div className="flex items-center">
+                <Checkbox
+                  id="mostrarSenhaCadastro"
+                  checked={mostrarC}
+                  onCheckedChange={setMostrarC}
+                />
+                <Label htmlFor="mostrarSenhaCadastro" className="text-white">
+                  Mostrar senha
+                </Label>
+              </div>
+
               <Input
                 placeholder="CPF"
                 className="text-white"
@@ -298,12 +316,12 @@ const MainLogin = () => {
                 placeholder="Telefone"
                 className="text-white"
                 type="text"
-                onChange={(e) =>
-                  handleCadastroChange("telefone", e.target.value)
-                }
+                onChange={(e) => handleCadastroChange("telefone", e.target.value)}
                 value={cadastro.telefone}
               />
-              <p className="text-white flex justify-center">Insira a data de nascimento abaixo</p>
+              <p className="text-white flex justify-center">
+                Insira a data de nascimento abaixo
+              </p>
               <Input
                 placeholder="Data de nascimento"
                 type="date"
@@ -370,9 +388,7 @@ const MainLogin = () => {
 
             {cadastroMsg && (
               <Alert
-                variant={
-                  cadastroMsg.title === "Sucesso" ? "default" : "destructive"
-                }
+                variant={cadastroMsg.title === "Sucesso" ? "default" : "destructive"}
                 className={`mt-4 border-4 ${
                   cadastroMsg.title === "Sucesso"
                     ? "border-green-700"
