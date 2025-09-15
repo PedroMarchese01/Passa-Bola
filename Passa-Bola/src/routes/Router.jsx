@@ -6,6 +6,13 @@ import Analytics from "@/pages/childrens pages/Analytics";
 import Events from "@/pages/childrens pages/Events"
 import Admin from "@/pages/childrens pages/Admin";
 import Users from "@/pages/childrens pages/Users"
+import Sobre from "../pages/sobre";
+import Contato from "../pages/Contato";
+import Jogos from "../pages/Jogos";
+
+
+
+
 const Router = createBrowserRouter([
   {
     path: "/",
@@ -36,7 +43,21 @@ const Router = createBrowserRouter([
         element: <Users/>,
       }
     ]
+  },
+  { 
+    path: "/sobre",
+    element: <Sobre/>
+  },
+  {
+    path: "/contato",
+    element: <Contato/>
+  },
+  {
+    path: "/jogos",
+    element: <Jogos/>
   }
+  
+
 ]);
 
 export default Router;
