@@ -30,6 +30,7 @@ const MainLogin = () => {
   const [cadastroMsg, setCadastroMsg] = useState(null);
 
   const [openModal, setOpenModal] = useState(false);
+  const [aceitouTermos, setAceitouTermos] = useState(false);
 
   const handleLoginChange = (field, value) =>
     setLogin({ ...login, [field]: value });
@@ -43,9 +44,7 @@ const MainLogin = () => {
         numeros += cpf[i];
       }
     }
-
     if (numeros.length !== 11) return false;
-
     let repetido = true;
     for (let i = 1; i < numeros.length; i++) {
       if (numeros[i] !== numeros[0]) {
@@ -54,19 +53,16 @@ const MainLogin = () => {
       }
     }
     if (repetido) return false;
-
     let soma = 0;
     for (let i = 0; i < 9; i++) soma += parseInt(numeros[i]) * (10 - i);
     let resto = (soma * 10) % 11;
     if (resto === 10) resto = 0;
     if (resto !== parseInt(numeros[9])) return false;
-
     soma = 0;
     for (let i = 0; i < 10; i++) soma += parseInt(numeros[i]) * (11 - i);
     resto = (soma * 10) % 11;
     if (resto === 10) resto = 0;
     if (resto !== parseInt(numeros[10])) return false;
-
     return true;
   };
 
@@ -78,11 +74,8 @@ const MainLogin = () => {
 
     if (userExist) {
       setError(null);
-
-      // SALVA USUÁRIO LOGADO
       localStorage.setItem("loggedUser", JSON.stringify(userExist));
       localStorage.setItem("logged?", true);
-
       if (userExist.admin) {
         navigate("/adminControlPainel");
       } else {
@@ -99,6 +92,14 @@ const MainLogin = () => {
   const handleCadastro = () => {
     setCadastroMsg(null);
     const { nome, email, senha, confirmS, cpf, telefone, date } = cadastro;
+
+    if (!aceitouTermos) {
+      setCadastroMsg({
+        title: "Termos não aceitos",
+        description: "Você precisa aceitar os termos para se cadastrar.",
+      });
+      return;
+    }
 
     if (!nome || !email || !senha || !confirmS || !cpf || !date || !telefone) {
       setCadastroMsg({
@@ -311,19 +312,51 @@ const MainLogin = () => {
                 value={cadastro.date}
               />
 
-              <div className="flex gap-2">
-                <p className="text-white text-sm">
-                  Clicando em "Cadastrar", você concorda com nossos{" "}
+              {/* Modal centralizado */}
+              <div className="flex items-center gap-2">
+                <Checkbox
+                  id="aceitarTermos"
+                  checked={aceitouTermos}
+                  onCheckedChange={setAceitouTermos}
+                />
+                <Label htmlFor="aceitarTermos" className="text-white">
+                  Li e aceito os{" "}
                   <button
                     type="button"
                     className="underline text-blue-400"
                     onClick={() => setOpenModal(true)}
                   >
                     Termos
-                  </button>{" "}
-                  de uso e políticas de privacidade.
-                </p>
+                  </button>
+                </Label>
               </div>
+
+              {openModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+                  <div className="bg-white text-black rounded-lg p-6 max-w-lg w-full shadow-lg relative">
+                    <h3 className="text-xl font-bold mb-4">Termos de Aceite</h3>
+                    <p className="mb-2">
+                      Antes de se cadastrar, você deve aceitar os seguintes termos:
+                    </p>
+                    <ul className="list-disc ml-5 space-y-1 mb-4 text-sm">
+                      <li>Seguindo a LGPD, seus dados serão tratados com segurança e confidencialidade.</li>
+                      <li>Não nos responsabilizamos por qualquer incidente ou acidente na ida à quadra.</li>
+                      <li>Somente jogadoras de sexo biológico feminino são aceitas.</li>
+                      <li>Qualquer tentativa de cadastro por indivíduos do sexo masculino ou fora das regras está sujeita a ação legal.</li>
+                      <li>O cadastro implica concordância com todas as regras da plataforma.</li>
+                      <li>O descumprimento das normas pode resultar em bloqueio ou penalidades.</li>
+                    </ul>
+                    <div className="flex justify-end gap-2 mt-4">
+                      <Button
+                        className="bg-gray-300 text-black hover:bg-gray-400"
+                        onClick={() => setOpenModal(false)}
+                      >
+                        Fechar
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div className="flex justify-center">
                 <Button
