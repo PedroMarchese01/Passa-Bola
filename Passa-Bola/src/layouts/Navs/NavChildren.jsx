@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import logo from "../../assets/logo.png";
 
@@ -10,7 +10,6 @@ const NavSobre = () => {
   const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
-    // sempre checa se o usuário está logado
     const logged = localStorage.getItem("logged?") === "true";
     setIsLogged(logged);
 
@@ -28,7 +27,7 @@ const NavSobre = () => {
         }`}
       >
         {/* Logo + Nome */}
-        <div className="flex justify-center items-center gap-4">
+        <Link to="/" className="flex justify-center items-center gap-4">
           <div className="p-1 rounded-full bg-white">
             <img
               src={logo}
@@ -36,25 +35,35 @@ const NavSobre = () => {
               className="h-5 md:h-6 lg:h-7 w-auto object-contain drop-shadow-[0_0_10px_white]"
             />
           </div>
-          <span className="text-white font-bold text-xl cursor-pointer">
-            Passa Bola
-          </span>
-        </div>
+          <span className="text-white font-bold text-xl">Passa Bola</span>
+        </Link>
 
         {/* Links Desktop */}
         <div className="hidden md:flex gap-8">
-          <p className="text-gray-300 hover:text-white transition-colors cursor-pointer">
+          <Link
+            to="/sobre"
+            className="text-gray-300 hover:text-white transition-colors"
+          >
             Sobre
-          </p>
-          <p className="text-gray-300 hover:text-white transition-colors cursor-pointer">
+          </Link>
+          <Link
+            to="/contato"
+            className="text-gray-300 hover:text-white transition-colors"
+          >
             Contato
-          </p>
-          <p className="text-gray-300 hover:text-white transition-colors cursor-pointer">
+          </Link>
+          <Link
+            to="/jogos-mensais"
+            className="text-gray-300 hover:text-white transition-colors"
+          >
             Jogos Mensais
-          </p>
-          <p className="text-gray-300 hover:text-white transition-colors cursor-pointer">
+          </Link>
+          <Link
+            to="/campeonatos"
+            className="text-gray-300 hover:text-white transition-colors"
+          >
             Campeonatos
-          </p>
+          </Link>
         </div>
 
         {/* Login / Avatar */}
@@ -73,7 +82,6 @@ const NavSobre = () => {
               title="Minha conta"
               onClick={() => navigate("/perfil")}
             >
-              {/* Pode trocar por uma foto real depois */}
               EU
             </div>
           )}
@@ -91,31 +99,53 @@ const NavSobre = () => {
       {/* Dropdown Mobile */}
       {menuOpen && (
         <div className="md:hidden absolute top-16 left-0 w-full bg-[#1c1c1c] flex flex-col items-center gap-6 py-6 z-30">
-          <p className="text-gray-300 hover:text-white transition-colors cursor-pointer">
+          <Link
+            to="/sobre"
+            className="text-gray-300 hover:text-white transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
             Sobre
-          </p>
-          <p className="text-gray-300 hover:text-white transition-colors cursor-pointer">
+          </Link>
+          <Link
+            to="/contato"
+            className="text-gray-300 hover:text-white transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
             Contato
-          </p>
-          <p className="text-gray-300 hover:text-white transition-colors cursor-pointer">
+          </Link>
+          <Link
+            to="/jogos-mensais"
+            className="text-gray-300 hover:text-white transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
             Jogos Mensais
-          </p>
-          <p className="text-gray-300 hover:text-white transition-colors cursor-pointer">
+          </Link>
+          <Link
+            to="/campeonatos"
+            className="text-gray-300 hover:text-white transition-colors"
+            onClick={() => setMenuOpen(false)}
+          >
             Campeonatos
-          </p>
+          </Link>
 
           {!isLogged ? (
             <Button
               variant="outline"
               className="border-purple-700 text-purple-700 bg-transparent px-4 py-2 rounded-lg"
-              onClick={() => navigate("/login")}
+              onClick={() => {
+                navigate("/login");
+                setMenuOpen(false);
+              }}
             >
               Login
             </Button>
           ) : (
             <div
               className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold cursor-pointer hover:opacity-80"
-              onClick={() => navigate("/perfil")}
+              onClick={() => {
+                navigate("/perfil");
+                setMenuOpen(false);
+              }}
             >
               EU
             </div>
