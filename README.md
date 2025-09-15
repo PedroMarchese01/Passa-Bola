@@ -6,8 +6,6 @@ Este é um projeto de aplicação web completa, focado na criação de um **Sist
 
 O objetivo principal é demonstrar a aplicação de tecnologias modernas de front-end para construir uma aplicação dinâmica, interativa e funcional, utilizando React e seu ecossistema.
 
-*(Você pode adicionar o link para o projeto aqui quando estiver online)*
-`[Link do Projeto]`
 
 ## ✨ Funcionalidades Principais
 
