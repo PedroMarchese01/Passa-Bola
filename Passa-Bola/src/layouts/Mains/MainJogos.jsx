@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import bgImg from "../../assets/hero13.png"; // fundo
 
 const MainJogos = () => {
@@ -21,6 +22,14 @@ const MainJogos = () => {
 
   const isAdmin = localStorage.getItem("isAdmin") === "true";
   const menuRef = useRef(null);
+  const navigate = useNavigate();
+
+  // helper para checar login (aceita 'logged' OU 'logged?')
+  const isLogged = () => {
+    const v1 = localStorage.getItem("logged") === "true";
+    const v2 = localStorage.getItem("logged?") === "true";
+    return v1 || v2;
+  };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -85,7 +94,7 @@ const MainJogos = () => {
           </p>
         </div>
 
-        {/* Lápis do Admin */}
+        {/* Menu do Admin (lápis) */}
         {isAdmin && (
           <div ref={menuRef} className="absolute top-6 right-6 z-50">
             <button
@@ -146,7 +155,7 @@ const MainJogos = () => {
                 key={game.id}
                 className="relative bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md border border-gray-700/30 hover:scale-105 hover:bg-white/10 transition-transform duration-300"
               >
-                {/* Lixeira no modo delete */}
+                {/* Modo deletar */}
                 {isAdmin && deleteMode && (
                   <button
                     onClick={() => handleDeleteGame(game.id)}
@@ -157,7 +166,7 @@ const MainJogos = () => {
                   </button>
                 )}
 
-                {/* Lápis no modo edição */}
+                {/* Modo editar */}
                 {isAdmin && editMode && (
                   <button
                     onClick={() => {
@@ -188,7 +197,19 @@ const MainJogos = () => {
                 </div>
 
                 <button
-                  onClick={() => !deleteMode && !editMode && setSelectedGame(game)}
+                  onClick={() => {
+                    if (!isLogged()) {
+                      alert("⚠️ Você precisa estar logado para se inscrever!");
+                      navigate("/login");
+                      return;
+                    }
+                    setRegisterData({
+                      name: localStorage.getItem("userName") || "",
+                      email: localStorage.getItem("userEmail") || "",
+                      phone: "",
+                    });
+                    setSelectedGame(game);
+                  }}
                   disabled={status.text === "Encerrado" || deleteMode || editMode}
                   className={`w-full py-2 rounded-lg font-semibold transition ${
                     status.text === "Encerrado" || deleteMode || editMode
@@ -203,81 +224,6 @@ const MainJogos = () => {
           })}
         </div>
       </div>
-
-      {/* Modal Adicionar/Editar jogo */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50" onClick={() => setShowModal(false)}>
-          <div
-            className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-lg border border-purple-500/40 max-w-lg w-full mx-6 text-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2 className="text-2xl font-bold text-purple-400 mb-6">{newGame.id ? "Editar Jogo" : "Adicionar Novo Jogo"}</h2>
-            <form onSubmit={handleSaveGame} className="space-y-4 text-left">
-              <div>
-                <label className="block text-gray-200">Título</label>
-                <input
-                  type="text"
-                  value={newGame.title}
-                  onChange={(e) => setNewGame({ ...newGame, title: e.target.value })}
-                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                  placeholder="Ex: Jogo Feminino - Maio"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200">Data</label>
-                <input
-                  type="date"
-                  value={newGame.date}
-                  onChange={(e) => setNewGame({ ...newGame, date: e.target.value })}
-                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200">Horário</label>
-                <input
-                  type="time"
-                  value={newGame.time}
-                  onChange={(e) => setNewGame({ ...newGame, time: e.target.value })}
-                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200">Local</label>
-                <input
-                  type="text"
-                  value={newGame.location}
-                  onChange={(e) => setNewGame({ ...newGame, location: e.target.value })}
-                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                  placeholder="Ex: Arena Central"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-gray-200">Máximo de Jogadoras</label>
-                <input
-                  type="number"
-                  value={newGame.maxPlayers}
-                  onChange={(e) => setNewGame({ ...newGame, maxPlayers: parseInt(e.target.value || "0", 10) })}
-                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
-                  placeholder="Ex: 20"
-                  min={1}
-                  required
-                />
-              </div>
-              <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition">
-                Salvar Jogo
-              </button>
-            </form>
-
-            <button onClick={() => setShowModal(false)} className="mt-6 text-sm text-gray-300 hover:text-white transition">
-              Cancelar
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Modal Inscrição */}
       {selectedGame && (
@@ -298,7 +244,7 @@ const MainJogos = () => {
                   type="text"
                   value={registerData.name}
                   onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
-                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white"
                   placeholder="Seu nome"
                   required
                 />
@@ -309,7 +255,7 @@ const MainJogos = () => {
                   type="email"
                   value={registerData.email}
                   onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
-                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white"
                   placeholder="seuemail@email.com"
                   required
                 />
@@ -320,7 +266,7 @@ const MainJogos = () => {
                   type="tel"
                   value={registerData.phone}
                   onChange={(e) => setRegisterData({ ...registerData, phone: e.target.value })}
-                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:outline-none"
+                  className="w-full mt-1 p-3 rounded-lg bg-black/40 border border-gray-600 text-white"
                   placeholder="(11) 99999-9999"
                 />
               </div>
