@@ -14,6 +14,7 @@ const Events = () => {
   const [name, setName] = useState("");
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
+  const [time, setTime] = useState(""); // ⏰ novo estado
   const [location, setLocation] = useState("");
   const [maxInscritos, setMaxInscritos] = useState("");
 
@@ -22,10 +23,11 @@ const Events = () => {
     const initialized = storedEvents.map((e) => ({
       ...e,
       inscritos: e.inscritos || [],
-      brackets: e.brackets?.map((r) => ({
-        ...r,
-        matches: r.matches || [],
-      })) || [],
+      brackets:
+        e.brackets?.map((r) => ({
+          ...r,
+          matches: r.matches || [],
+        })) || [],
     }));
     setEvents(initialized);
   }, []);
@@ -33,6 +35,7 @@ const Events = () => {
   useEffect(() => {
     setDateStart("");
     setDateEnd("");
+    setTime(""); // limpa horário quando muda tipo
     setMaxInscritos("");
   }, [type]);
 
@@ -52,7 +55,7 @@ const Events = () => {
     if (
       !name ||
       !location ||
-      (type === "mensal" && !maxInscritos) ||
+      (type === "mensal" && (!dateStart || !time || !maxInscritos)) || // ⏰ horário obrigatório
       (type === "campeonato" && (!dateStart || !dateEnd))
     ) {
       showAlert("Erro", "Preencha todos os campos obrigatórios!");
@@ -83,6 +86,7 @@ const Events = () => {
               dateStart: type === "campeonato" ? dateStart : undefined,
               dateEnd: type === "campeonato" ? dateEnd : undefined,
               date: type === "mensal" ? dateStart : undefined,
+              time: type === "mensal" ? time : undefined, // ⏰ salva horário
               location,
               maxInscritos: type === "mensal" ? parseInt(maxInscritos) : undefined,
             }
@@ -91,11 +95,6 @@ const Events = () => {
       saveEvents(updatedEvents);
       setEditingEvent(null);
     } else {
-      if (type === "campeonato" && events.some((e) => e.type === "campeonato")) {
-        showAlert("Erro", "Só é permitido um campeonato ativo!");
-        return;
-      }
-
       const newEvent = {
         id: Date.now(),
         type,
@@ -106,6 +105,7 @@ const Events = () => {
         dateStart: type === "campeonato" ? dateStart : undefined,
         dateEnd: type === "campeonato" ? dateEnd : undefined,
         date: type === "mensal" ? dateStart : undefined,
+        time: type === "mensal" ? time : undefined, // ⏰ salva horário
         brackets: [],
       };
 
@@ -115,6 +115,7 @@ const Events = () => {
     setName("");
     setDateStart("");
     setDateEnd("");
+    setTime(""); // limpa após salvar
     setLocation("");
     setMaxInscritos("");
   };
@@ -135,51 +136,9 @@ const Events = () => {
       setMaxInscritos("");
     } else {
       setDateStart(event.date);
+      setTime(event.time || ""); // ⏰ carrega horário
       setMaxInscritos(event.maxInscritos || "");
     }
-  };
-
-  const handleGenerateBrackets = (eventId) => {
-    const updatedEvents = events.map((event) => {
-      if (event.id === eventId) {
-        if (!event.inscritos || event.inscritos.length < 2) {
-          showAlert("Erro", "É necessário pelo menos 2 participantes para gerar chaves!");
-          return event;
-        }
-
-        const shuffled = [...event.inscritos].sort(() => Math.random() - 0.5);
-        const brackets = [];
-        let round = 1;
-        let currentRound = shuffled;
-
-        while (currentRound.length > 1) {
-          const matches = [];
-          const nextRound = [];
-          for (let i = 0; i < currentRound.length; i += 2) {
-            const teamA = currentRound[i];
-            const teamB = currentRound[i + 1] || null;
-
-            matches.push({
-              matchNumber: i / 2 + 1,
-              teamA,
-              teamB,
-              winner: null,
-            });
-
-            nextRound.push(teamB ? `Vencedor de ${teamA} x ${teamB}` : teamA);
-          }
-
-          brackets.push({ round: `Rodada ${round}`, matches });
-          currentRound = nextRound;
-          round++;
-        }
-
-        return { ...event, brackets };
-      }
-      return event;
-    });
-
-    saveEvents(updatedEvents);
   };
 
   const campeonatos = events.filter((e) => e.type === "campeonato");
@@ -255,6 +214,13 @@ const Events = () => {
                 className="bg-[#1c1c1c] text-white"
               />
               <Input
+                type="time" // ⏰ campo novo
+                placeholder="Horário do jogo"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="bg-[#1c1c1c] text-white"
+              />
+              <Input
                 type="number"
                 placeholder="Número máximo de inscrições"
                 value={maxInscritos}
@@ -272,66 +238,6 @@ const Events = () => {
 
         {/* Listas de eventos */}
         <div className="md:w-2/3 flex flex-col gap-6 overflow-auto">
-          {/* Campeonatos */}
-          <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-semibold">Campeonato Atual</h2>
-            {campeonatos.length === 0 ? (
-              <p className="text-gray-400">Nenhum campeonato cadastrado.</p>
-            ) : (
-              campeonatos.map((e) => (
-                <div key={e.id} className="p-4 bg-[#2c2c2c] rounded-lg border border-gray-700">
-                  <p className="font-semibold">
-                    Nome: <span className="font-normal">{e.name}</span>
-                  </p>
-                  <p className="font-semibold">
-                    Local: <span className="font-normal">{e.location}</span>
-                  </p>
-                  <p className="font-semibold">
-                    Início: <span className="font-normal">{e.dateStart}</span>
-                  </p>
-                  <p className="font-semibold">
-                    Término: <span className="font-normal">{e.dateEnd}</span>
-                  </p>
-                  <p className="font-semibold">
-                    Participantes: <span className="font-normal">{e.inscritos.length}</span>
-                  </p>
-
-                  {e.brackets?.length > 0 && (
-                    <div className="mt-4">
-                      <h3 className="text-lg font-bold mb-2">Chaves do Campeonato</h3>
-                      <div className="flex flex-col gap-4">
-                        {e.brackets?.map((round, ri) => (
-                          <div key={ri} className="bg-[#2a2a2a] p-3 rounded-lg border border-gray-600">
-                            <h4 className="font-semibold mb-2">{round.round}</h4>
-                            <ul className="flex flex-col gap-1">
-                              {round.matches?.map((m, mi) => (
-                                <li
-                                  key={mi}
-                                  className="flex justify-between items-center p-2 bg-[#1f1f1f] rounded-md border border-gray-700 hover:bg-[#3a3a3a] transition"
-                                >
-                                  <span>{m.teamA} {m.teamB ? `x ${m.teamB}` : "(passa direto)"}</span>
-                                  <span className="text-sm text-gray-400">
-                                    {m.winner ? `Vencedor: ${m.winner}` : "Aguardando resultado"}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex gap-2 mt-2">
-                    <Button onClick={() => handleEditEvent(e)}>Editar</Button>
-                    <Button className="bg-red-500 hover:bg-red-600" onClick={() => handleRemoveEvent(e.id)}>Remover</Button>
-                    <Button className="bg-blue-500 hover:bg-blue-600" onClick={() => handleGenerateBrackets(e.id)}>Gerar Chaves</Button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-
           {/* Jogos Mensais */}
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-semibold">Jogos Mensais</h2>
@@ -339,14 +245,36 @@ const Events = () => {
               <p className="text-gray-400">Nenhum jogo mensal cadastrado.</p>
             ) : (
               jogosMensais.map((e) => (
-                <div key={e.id} className="p-4 bg-[#2c2c2c] rounded-lg border border-gray-700">
-                  <p className="font-semibold">Nome: <span className="font-normal">{e.name}</span></p>
-                  <p className="font-semibold">Local: <span className="font-normal">{e.location}</span></p>
-                  <p className="font-semibold">Data: <span className="font-normal">{e.date}</span></p>
-                  <p className="font-semibold">Participantes: <span className="font-normal">{e.inscritos.length}/{e.maxInscritos}</span></p>
+                <div
+                  key={e.id}
+                  className="p-4 bg-[#2c2c2c] rounded-lg border border-gray-700"
+                >
+                  <p className="font-semibold">
+                    Nome: <span className="font-normal">{e.name}</span>
+                  </p>
+                  <p className="font-semibold">
+                    Local: <span className="font-normal">{e.location}</span>
+                  </p>
+                  <p className="font-semibold">
+                    Data: <span className="font-normal">{e.date}</span>
+                  </p>
+                  <p className="font-semibold">
+                    Horário: <span className="font-normal">{e.time}</span>
+                  </p>
+                  <p className="font-semibold">
+                    Participantes:{" "}
+                    <span className="font-normal">
+                      {e.inscritos.length}/{e.maxInscritos}
+                    </span>
+                  </p>
                   <div className="flex gap-2 mt-2">
                     <Button onClick={() => handleEditEvent(e)}>Editar</Button>
-                    <Button className="bg-red-500 hover:bg-red-600" onClick={() => handleRemoveEvent(e.id)}>Remover</Button>
+                    <Button
+                      className="bg-red-500 hover:bg-red-600"
+                      onClick={() => handleRemoveEvent(e.id)}
+                    >
+                      Remover
+                    </Button>
                   </div>
                 </div>
               ))

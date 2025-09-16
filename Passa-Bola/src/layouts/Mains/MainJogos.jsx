@@ -1,39 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import bgImg from "../../assets/hero13.png"; // fundo
+import bgImg from "../../assets/hero2.jpg"; // fundo
+
+const storageKey = "eventsStorage";
 
 const MainJogos = () => {
-  const [games, setGames] = useState([
-    {
-      id: 1,
-      title: "Jogo Feminino - Fevereiro",
-      date: "2025-02-20",
-      time: "18:00",
-      location: "Arena Futebol SP",
-      currentPlayers: 5,
-      maxPlayers: 20,
-    },
-    {
-      id: 2,
-      title: "Jogo Feminino - Março",
-      date: "2025-03-15",
-      time: "15:30",
-      location: "Estádio Municipal",
-      currentPlayers: 12,
-      maxPlayers: 20,
-    },
-    {
-      id: 3,
-      title: "Jogo Feminino - Abril",
-      date: "2025-04-12",
-      time: "10:00",
-      location: "Arena Society",
-      currentPlayers: 0,
-      maxPlayers: 15,
-    },
-  ]);
-
+  const [games, setGames] = useState([]);
   const [selectedGame, setSelectedGame] = useState(null);
   const [registerData, setRegisterData] = useState({
     name: "",
@@ -53,6 +26,23 @@ const MainJogos = () => {
     const v2 = localStorage.getItem("logged?") === "true";
     return v1 || v2;
   };
+
+  // 🚨 Carregar jogos do localStorage
+  useEffect(() => {
+    const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const mensais = storedEvents.filter((e) => e.type === "mensal");
+    // converte para o formato que sua tela já usa
+    const formatted = mensais.map((e) => ({
+      id: e.id,
+      title: e.name,
+      date: e.date,
+      time: e.time || "00:00", // fallback se não tiver hora
+      location: e.location,
+      currentPlayers: e.inscritos?.length || 0,
+      maxPlayers: e.maxInscritos || 0,
+    }));
+    setGames(formatted);
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -79,7 +69,7 @@ const MainJogos = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Atualiza número de inscritos
+    // Atualiza número de inscritos localmente
     setGames((prev) =>
       prev.map((g) =>
         g.id === selectedGame.id
@@ -87,6 +77,15 @@ const MainJogos = () => {
           : g
       )
     );
+
+    // Atualiza também no localStorage (para persistir)
+    const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const updatedEvents = storedEvents.map((ev) =>
+      ev.id === selectedGame.id
+        ? { ...ev, inscritos: [...(ev.inscritos || []), registerData.name] }
+        : ev
+    );
+    localStorage.setItem(storageKey, JSON.stringify(updatedEvents));
 
     alert(
       `✅ Inscrição confirmada!\nNome: ${registerData.name}\nEmail: ${registerData.email}\nJogo: ${selectedGame.title}`
@@ -100,7 +99,7 @@ const MainJogos = () => {
       className="pt-24 px-6 md:px-20 pb-16 min-h-screen bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${bgImg})` }}
     >
-      <div className="bg-black/70 min-h-screen rounded-2xl p-8 md:p-12 shadow-xl relative">
+      <div className="bg-black/80 min-h-screen rounded-2xl p-8 md:p-12 shadow-xl relative">
         {/* Título */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white drop-shadow-lg">
