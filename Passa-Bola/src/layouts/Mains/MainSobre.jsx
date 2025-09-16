@@ -1,6 +1,6 @@
 import React from "react";
 import bgImg from "../../assets/hero8.png"; // fundo da página
-import luanaImg from "../../assets/luana.png"; // exemplo de imagem local
+// import luanaImg from "../../assets/luana.png"; // exemplo de imagem local
 
 const MainSobre = () => {
   return (
@@ -61,36 +61,27 @@ const MainSobre = () => {
             <h2 className="text-xl font-semibold text-purple-400">Nosso Time</h2>
             <div className="mt-4 flex flex-col gap-4">
               <div className="flex items-center gap-3">
+              </div>
+              <div className="flex items-center gap-3">
                 <img
-                  src={luanaImg}
+                  src="https://ui-avatars.com/api/?name=Luana+Maluf"
                   alt="Membro"
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="w-12 h-12 rounded-full"
                 />
                 <div>
                   <p className="text-white font-semibold">Luana Maluf</p>
-                  <p className="text-gray-300 text-xs">Fundadora</p>
+                  <p className="text-gray-300 text-xs">Dona</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
                 <img
-                  src="https://ui-avatars.com/api/?name=Maria+Silva"
+                  src="https://ui-avatars.com/api/?name=Ale+Xavier"
                   alt="Membro"
                   className="w-12 h-12 rounded-full"
                 />
                 <div>
-                  <p className="text-white font-semibold">Maria Silva</p>
-                  <p className="text-gray-300 text-xs">Gestora de Eventos</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                <img
-                  src="https://ui-avatars.com/api/?name=Pedro+Marchese"
-                  alt="Membro"
-                  className="w-12 h-12 rounded-full"
-                />
-                <div>
-                  <p className="text-white font-semibold">Pedro Marchese</p>
-                  <p className="text-gray-300 text-xs">Tecnologia</p>
+                  <p className="text-white font-semibold">Ale Xavier</p>
+                  <p className="text-gray-300 text-xs">Dona</p>
                 </div>
               </div>
             </div>
