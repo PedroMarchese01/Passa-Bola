@@ -33,7 +33,59 @@ const MainJogos = () => {
       currentPlayers: e.inscritos?.length || 0,
       maxPlayers: e.maxInscritos || 0,
     }));
-    setGames(formatted);
+
+    if (formatted.length === 0) {
+      const exemplos = [
+        {
+          id: "ex1",
+          type: "mensal",
+          name: "Jogo Feminino - Outubro",
+          date: "2025-10-20",
+          time: "18:00",
+          location: "PlayBall Arena (Quadra 1)",
+          inscritos: [],
+          maxInscritos: 20,
+        },
+        {
+          id: "ex2",
+          type: "mensal",
+          name: "Jogo Feminino - Novembro",
+          date: "2025-11-15",
+          time: "15:30",
+          location: "PlayBall Arena (Quadra 2)",
+          inscritos: [],
+          maxInscritos: 2,
+        },
+        {
+          id: "ex3",
+          type: "mensal",
+          name: "Jogo Feminino - Dezembro",
+          date: "2025-12-10",
+          time: "10:00",
+          location: "PlayBall Arena (Quadra 3)",
+          inscritos: [],
+          maxInscritos: 0,
+        },
+      ];
+
+
+      localStorage.setItem(storageKey, JSON.stringify(exemplos));
+
+
+      setGames(
+        exemplos.map((e) => ({
+          id: e.id,
+          title: e.name,
+          date: e.date,
+          time: e.time,
+          location: e.location,
+          currentPlayers: 0,
+          maxPlayers: e.maxInscritos,
+        }))
+      );
+    } else {
+      setGames(formatted);
+    }
   }, []);
 
   useEffect(() => {
