@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import heroImg from "@/assets/hero4.png";
-import NavHome from "../Navs/NavHome";
+import NavChildren from "../Navs/NavChildren"
 
 const MainCampeonatos = () => {
   const navigate = useNavigate();
@@ -64,18 +63,12 @@ const MainCampeonatos = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-black text-white flex flex-col">
+    <div className="w-full min-h-screen bg-[#1c1c1c] text-white flex flex-col">
       {/* Navbar */}
-      <NavHome />
+      <NavChildren/>
 
       {/* Hero + Card sobreposto */}
       <div className="relative w-full h-[70vh] sm:h-[80vh] md:h-[90vh] lg:h-[95vh]">
-        {/* Hero image */}
-        <img
-          src={heroImg}
-          alt="Campeonato"
-          className="w-full h-full object-cover"
-        />
 
         {/* Overlay escuro */}
         <div className="absolute inset-0 bg-black/50"></div>
