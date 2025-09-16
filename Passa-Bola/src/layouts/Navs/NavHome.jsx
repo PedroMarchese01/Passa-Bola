@@ -49,6 +49,50 @@ const NavHome = () => {
     };
   }, []);
 
+  // 🚨 Adiciona jogos de exemplo no localStorage se não houver nenhum
+  useEffect(() => {
+    const storageKey = "eventsStorage";
+    const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const hasMensal = storedEvents.some((e) => e.type === "mensal");
+
+    if (!hasMensal) {
+      const sampleGames = [
+        {
+          id: Date.now(),
+          type: "mensal",
+          name: "Jogo Feminino - Fevereiro",
+          date: "2025-02-20",
+          time: "18:00",
+          location: "PlayBall Arena",
+          inscritos: [],
+          maxInscritos: 20,
+        },
+        {
+          id: Date.now() + 1,
+          type: "mensal",
+          name: "Jogo Feminino - Março",
+          date: "2025-03-15",
+          time: "15:30",
+          location: "PlayBall Arena",
+          inscritos: [],
+          maxInscritos: 2,
+        },
+        {
+          id: Date.now() + 2,
+          type: "mensal",
+          name: "Jogo Feminino - Abril",
+          date: "2025-04-12",
+          time: "10:00",
+          location: "PlayBall Arena",
+          inscritos: [],
+          maxInscritos: 0,
+        },
+      ];
+
+      localStorage.setItem(storageKey, JSON.stringify([...storedEvents, ...sampleGames]));
+    }
+  }, []);
+
   return (
     <div className="w-screen h-screen relative overflow-x-hidden">
       {alert.show && (
