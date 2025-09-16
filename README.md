@@ -8,6 +8,13 @@ O objetivo principal é demonstrar a aplicação de tecnologias modernas de fron
 
 🔗 **Link Online:** [https://passa-bola-fnl.vercel.app](https://passa-bola-fnl.vercel.app)
 
+## 👥 Integrantes
+
+- Gustavo Neres Dos Santos - RM561785  
+- Rafaell Santiago Martins Da Silva - RM563486  
+- Pedro Marchese - RM563339  
+- Enzo Augusto - RM562249
+
 ## ✨ Funcionalidades Principais
 
 O sistema é dividido em duas grandes áreas: o Painel Administrativo e a Área Pública para usuários.
@@ -152,9 +159,3 @@ Esta é a área logada onde todo o gerenciamento da plataforma acontece.
 - **Cadastro de Administrador:** [https://passa-bola-fnl.vercel.app/admin/cadastro](https://passa-bola-fnl.vercel.app/admin/cadastro)
 - **Clima:** [https://passa-bola-fnl.vercel.app/admin/clima](https://passa-bola-fnl.vercel.app/admin/clima)
 
-## 👥 Integrantes
-
-- Gustavo Neres Dos Santos - RM561785  
-- Rafaell Santiago Martins Da Silva - RM563486  
-- Pedro Marchese - RM563339  
-- Enzo Augusto - RM562249
