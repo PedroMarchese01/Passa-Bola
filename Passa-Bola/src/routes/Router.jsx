@@ -3,10 +3,10 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import HomePassaBola from "@/pages/HomePassaBola";
 import Campeonatos from "@/pages/Campeonatos"; 
-import Analytics from "@/pages/childrens pages/Analytics";
-import Events from "@/pages/childrens pages/Events"
-import Admin from "@/pages/childrens pages/Admin";
-import Users from "@/pages/childrens pages/Users"
+import Analytics from "@/pages/childrens-pages/Analytics";
+import Events from "@/pages/childrens-pages/Events"
+import Admin from "@/pages/childrens-pages/Admin";
+import Users from "@/pages/childrens-pages/Users"
 import Sobre from "../pages/sobre";
 import Contato from "../pages/Contato";
 import Jogos from "../pages/Jogos";
@@ -14,7 +14,7 @@ import Jogos from "../pages/Jogos";
 
 
 
-import Clima from "@/pages/childrens pages/Clima";
+import Clima from "@/pages/childrens-pages/Clima";
 const Router = createBrowserRouter([
   {
     path: "/",
