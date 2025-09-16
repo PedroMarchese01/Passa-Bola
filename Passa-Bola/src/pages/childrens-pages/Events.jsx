@@ -14,28 +14,43 @@ const Events = () => {
   const [name, setName] = useState("");
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
-  const [time, setTime] = useState(""); 
+  const [time, setTime] = useState("");
   const [location, setLocation] = useState("");
   const [maxInscritos, setMaxInscritos] = useState("");
 
+  // --- Carrega com parse seguro (evita tela branca se JSON estiver inválido)
   useEffect(() => {
-    const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
-    const initialized = storedEvents.map((e) => ({
-      ...e,
-      inscritos: e.inscritos || [],
-      brackets:
-        e.brackets?.map((r) => ({
-          ...r,
-          matches: r.matches || [],
-        })) || [],
-    }));
-    setEvents(initialized);
+    try {
+      const raw = localStorage.getItem(storageKey);
+      const storedEvents = raw ? JSON.parse(raw) : [];
+      const initialized = (storedEvents || []).map((e) => ({
+        ...e,
+        inscritos: Array.isArray(e.inscritos) ? e.inscritos : [],
+        brackets:
+          (e.brackets || []).map((r) => ({
+            ...r,
+            matches: r?.matches || [],
+          })) || [],
+      }));
+      setEvents(initialized);
+    } catch (err) {
+      console.error("Falha ao ler eventsStorage:", err);
+      // Se o JSON estiver corrompido, limpamos a chave para o app voltar a funcionar
+      localStorage.removeItem(storageKey);
+      setEvents([]);
+      setAlert({
+        title: "Aviso",
+        description:
+          "Detectamos dados corrompidos no armazenamento local. Limpamos os eventos para evitar erros.",
+      });
+    }
   }, []);
 
+  // Reset de campos quando troca o tipo
   useEffect(() => {
     setDateStart("");
     setDateEnd("");
-    setTime(""); 
+    setTime("");
     setMaxInscritos("");
   }, [type]);
 
@@ -55,7 +70,7 @@ const Events = () => {
     if (
       !name ||
       !location ||
-      (type === "mensal" && (!dateStart || !time || !maxInscritos)) || 
+      (type === "mensal" && (!dateStart || !time || !maxInscritos)) ||
       (type === "campeonato" && (!dateStart || !dateEnd))
     ) {
       showAlert("Erro", "Preencha todos os campos obrigatórios!");
@@ -81,13 +96,16 @@ const Events = () => {
       const updatedEvents = events.map((e) =>
         e.id === editingEvent.id
           ? {
-              ...editingEvent,
+              ...e,
+              type, // garante que o tipo atual seja mantido se o usuário trocar
               name,
+              location,
+              // campos de campeonato
               dateStart: type === "campeonato" ? dateStart : undefined,
               dateEnd: type === "campeonato" ? dateEnd : undefined,
+              // campos de mensal
               date: type === "mensal" ? dateStart : undefined,
-              time: type === "mensal" ? time : undefined, 
-              location,
+              time: type === "mensal" ? time : undefined,
               maxInscritos: type === "mensal" ? parseInt(maxInscritos) : undefined,
             }
           : e
@@ -100,16 +118,19 @@ const Events = () => {
         name,
         location,
         inscritos: [],
+        // mensal
         maxInscritos: type === "mensal" ? parseInt(maxInscritos) : undefined,
+        date: type === "mensal" ? dateStart : undefined,
+        time: type === "mensal" ? time : undefined,
+        // campeonato
         dateStart: type === "campeonato" ? dateStart : undefined,
         dateEnd: type === "campeonato" ? dateEnd : undefined,
-        date: type === "mensal" ? dateStart : undefined,
-        time: type === "mensal" ? time : undefined, 
         brackets: [],
       };
       saveEvents([...events, newEvent]);
     }
 
+    // limpa formulário
     setName("");
     setLocation("");
     setDateStart("");
@@ -127,17 +148,17 @@ const Events = () => {
   const handleEditEvent = (event) => {
     setEditingEvent(event);
     setType(event.type);
-    setName(event.name);
-    setLocation(event.location);
+    setName(event.name || "");
+    setLocation(event.location || "");
     if (event.type === "campeonato") {
-      setDateStart(event.dateStart);
-      setDateEnd(event.dateEnd);
+      setDateStart(event.dateStart || "");
+      setDateEnd(event.dateEnd || "");
       setMaxInscritos("");
       setTime("");
     } else {
-      setDateStart(event.date);
-      setTime(event.time || ""); 
-      setMaxInscritos(event.maxInscritos || "");
+      setDateStart(event.date || "");
+      setTime(event.time || "");
+      setMaxInscritos(event.maxInscritos?.toString() || "");
       setDateEnd("");
     }
   };
@@ -159,6 +180,7 @@ const Events = () => {
       </div>
 
       <div className="flex-1 flex flex-col md:flex-row gap-6 p-6 overflow-hidden">
+        {/* Form */}
         <div className="md:w-1/3 bg-[#2c2c2c] p-4 rounded-lg flex flex-col gap-4 overflow-auto">
           <div className="flex gap-2">
             <select
@@ -214,7 +236,7 @@ const Events = () => {
                 className="bg-[#1c1c1c] text-white"
               />
               <Input
-                type="time" 
+                type="time"
                 placeholder="Horário do jogo"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
@@ -235,7 +257,10 @@ const Events = () => {
             {editingEvent ? "Salvar Alterações" : "Adicionar Evento"}
           </Button>
         </div>
+
+        {/* Listas */}
         <div className="md:w-2/3 flex flex-col gap-6 overflow-auto">
+          {/* Jogos Mensais */}
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-semibold">Jogos Mensais</h2>
             {jogosMensais.length === 0 ? (
@@ -253,16 +278,53 @@ const Events = () => {
                     Local: <span className="font-normal">{e.location}</span>
                   </p>
                   <p className="font-semibold">
-                    Data: <span className="font-normal">{e.date}</span>
+                    Data: <span className="font-normal">{e.date || "-"}</span>
                   </p>
                   <p className="font-semibold">
-                    Horário: <span className="font-normal">{e.time}</span>
+                    Horário: <span className="font-normal">{e.time || "-"}</span>
                   </p>
                   <p className="font-semibold">
                     Participantes:{" "}
                     <span className="font-normal">
-                      {e.inscritos.length}/{e.maxInscritos}
+                      {(e.inscritos || []).length}/{e.maxInscritos ?? "-"}
                     </span>
+                  </p>
+                  <div className="flex gap-2 mt-2">
+                    <Button onClick={() => handleEditEvent(e)}>Editar</Button>
+                    <Button
+                      className="bg-red-500 hover:bg-red-600"
+                      onClick={() => handleRemoveEvent(e.id)}
+                    >
+                      Remover
+                    </Button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Campeonatos */}
+          <div className="flex flex-col gap-4">
+            <h2 className="text-xl font-semibold">Campeonatos</h2>
+            {campeonatos.length === 0 ? (
+              <p className="text-gray-400">Nenhum campeonato cadastrado.</p>
+            ) : (
+              campeonatos.map((e) => (
+                <div
+                  key={e.id}
+                  className="p-4 bg-[#2c2c2c] rounded-lg border border-gray-700"
+                >
+                  <p className="font-semibold">
+                    Nome: <span className="font-normal">{e.name}</span>
+                  </p>
+                  <p className="font-semibold">
+                    Local: <span className="font-normal">{e.location}</span>
+                  </p>
+                  <p className="font-semibold">
+                    Início: <span className="font-normal">{e.dateStart || "-"}</span>
+                  </p>
+                  <p className="font-semibold">
+                    Término: <span className="font-normal">{e.dateEnd || "-"}</span>
                   </p>
                   <div className="flex gap-2 mt-2">
                     <Button onClick={() => handleEditEvent(e)}>Editar</Button>
