@@ -15,7 +15,7 @@ const Home = () => {
 
 
   return (
-    <div className='w-full h-full bg-[#1c1c1c] flex flex-col'>
+    <div className='w-full min-h-screen bg-[#1c1c1c] flex flex-col'>
       <div className="w-full">
         <NavHome />
       </div>
