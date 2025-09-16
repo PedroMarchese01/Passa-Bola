@@ -6,6 +6,7 @@ Este é um projeto de aplicação web completa, focado na criação de um **Sist
 
 O objetivo principal é demonstrar a aplicação de tecnologias modernas de front-end para construir uma aplicação dinâmica, interativa e funcional, utilizando React e seu ecossistema.
 
+🔗 **Link Online:** [https://passa-bola-fnl.vercel.app](https://passa-bola-fnl.vercel.app)
 
 ## ✨ Funcionalidades Principais
 
@@ -39,23 +40,23 @@ O sistema é dividido em duas grandes áreas: o Painel Administrativo e a Área 
 
 ## ⚙️ Como Executar o Projeto
 
-1.  **Clone o repositório:**
+1. **Clone o repositório:**
     ```bash
     git clone [URL-DO-SEU-REPOSITORIO]
     ```
-2.  **Acesse o diretório do projeto:**
+2. **Acesse o diretório do projeto:**
     ```bash
     cd [NOME-DA-PASTA-DO-PROJETO]
     ```
-3.  **Instale as dependências:**
+3. **Instale as dependências:**
     ```bash
     npm install
     ```
-4.  **Inicie o servidor de desenvolvimento:**
+4. **Inicie o servidor de desenvolvimento:**
     ```bash
     npm run dev
     ```
-5.  Abra seu navegador e acesse `http://localhost:5173` (ou a porta indicada no terminal).
+5. Abra seu navegador e acesse `http://localhost:5173` (ou a porta indicada no terminal).
 
 ## 🔎 Detalhamento das Páginas
 
@@ -87,8 +88,6 @@ Estas são as páginas que um visitante comum pode acessar.
 - **Funcionalidades:**
     - **`Sobre.js`**: Apresenta a descrição do projeto PassaBola.
     - **`Contato.js`**: Exibe informações de contato.
-
----
 
 ### 2. Painel de Controle do Administrador
 
@@ -134,9 +133,28 @@ Esta é a área logada onde todo o gerenciamento da plataforma acontece.
     - **Seleção de Localidade:** Permite escolher entre capitais pré-definidas ou inserir coordenadas personalizadas.
     - **Visualização Horária:** Exibe a previsão para as próximas horas e dias em um carrossel de cards.
 
+## 📍 Rotas para Acesso Rápido
+
+### Área Pública
+- **Home:** [https://passa-bola-fnl.vercel.app/](https://passa-bola-fnl.vercel.app/)
+- **Login:** [https://passa-bola-fnl.vercel.app/login](https://passa-bola-fnl.vercel.app/login)
+- **Jogos:** [https://passa-bola-fnl.vercel.app/jogos](https://passa-bola-fnl.vercel.app/jogos)
+- **Campeonatos:** [https://passa-bola-fnl.vercel.app/campeonatos](https://passa-bola-fnl.vercel.app/campeonatos)
+- **Sobre:** [https://passa-bola-fnl.vercel.app/sobre](https://passa-bola-fnl.vercel.app/sobre)
+- **Contato:** [https://passa-bola-fnl.vercel.app/contato](https://passa-bola-fnl.vercel.app/contato)
+
+### Painel Administrativo
+> **Obs.:** O acesso ao painel exige login de administrador.  
+- **Dashboard/Admin Home:** [https://passa-bola-fnl.vercel.app/admin](https://passa-bola-fnl.vercel.app/admin)
+- **Analytics:** [https://passa-bola-fnl.vercel.app/admin/analytics](https://passa-bola-fnl.vercel.app/admin/analytics)
+- **Eventos:** [https://passa-bola-fnl.vercel.app/admin/events](https://passa-bola-fnl.vercel.app/admin/events)
+- **Usuários:** [https://passa-bola-fnl.vercel.app/admin/users](https://passa-bola-fnl.vercel.app/admin/users)
+- **Cadastro de Administrador:** [https://passa-bola-fnl.vercel.app/admin/cadastro](https://passa-bola-fnl.vercel.app/admin/cadastro)
+- **Clima:** [https://passa-bola-fnl.vercel.app/admin/clima](https://passa-bola-fnl.vercel.app/admin/clima)
+
 ## 👥 Integrantes
 
-* Gustavo Neres Dos Santos - RM561785
-* Rafaell Santiago Martins Da Silva - RM563486
-* Pedro Marchese - RM563339
-* Enzo Augusto - RM562249
+- Gustavo Neres Dos Santos - RM561785  
+- Rafaell Santiago Martins Da Silva - RM563486  
+- Pedro Marchese - RM563339  
+- Enzo Augusto - RM562249
