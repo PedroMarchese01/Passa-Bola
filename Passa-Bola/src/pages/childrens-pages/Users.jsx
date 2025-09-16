@@ -139,7 +139,7 @@ const UsersAdminPanel = () => {
     </div>
   );
 
-  const renderCards = (list, isAdminTable = false) => (
+  const renderCards = (list = false) => (
     <div className="md:hidden grid gap-4">
       {list.map((user) => {
         const realIndex = user._realIndex;

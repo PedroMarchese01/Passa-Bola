@@ -81,7 +81,7 @@ const MainJogos = () => {
     localStorage.setItem(storageKey, JSON.stringify(updatedEvents));
 
     alert(
-      `✅ Inscrição confirmada!\nNome: ${registerData.name}\nEmail: ${registerData.email}\nJogo: ${selectedGame.title}`
+      `Inscrição confirmada!\nNome: ${registerData.name}\nEmail: ${registerData.email}\nJogo: ${selectedGame.title}`
     );
 
     setSelectedGame(null); 
@@ -109,7 +109,7 @@ const MainJogos = () => {
           <div className="mb-6">
             <Alert className="bg-white/90 border-4 border-red-600 text-red-600">
               <AlertDescription>
-                ⚠️ Você precisa estar logado para se inscrever!
+                 Você precisa estar logado para se inscrever!
                 <button
                   onClick={() => navigate("/login")}
                   className="ml-3 underline text-purple-400 hover:text-purple-300"

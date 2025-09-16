@@ -120,7 +120,7 @@ const NavHome = () => {
             </div>
           </Link>
           <Link to="/" className="text-white font-bold text-xl cursor-pointer">
-            Passa Bola
+            <p>Passa Bola</p>
           </Link>
         </div>
 
@@ -213,16 +213,8 @@ const NavHome = () => {
                         <div className="flex gap-2">
                           <Button
                             className="bg-purple-700 hover:bg-black/60 hover:border hover:border-white text-white px-4 py-2 rounded-lg shadow-md text-sm"
-                            onClick={() => navigate("/resultados")}
-                          >
-                            Ver Resultados
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="border-white text-white bg-white/10 px-4 py-2 rounded-lg text-sm"
-                            onClick={() => navigate("/proximos-jogos")}
-                          >
-                            Próximos Jogos
+                            onClick={() => navigate("/jogos-mensais")}>
+                             Ver Resultados e Proximos jogos
                           </Button>
                         </div>
                       </>

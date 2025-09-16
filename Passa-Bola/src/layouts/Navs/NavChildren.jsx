@@ -136,12 +136,8 @@ const NavSobre = () => {
           ) : (
             <div
               className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold cursor-pointer hover:opacity-80"
-              onClick={() => {
-                navigate("/perfil");
-                setMenuOpen(false);
-              }}
             >
-              EU
+              <p>EU</p>
             </div>
           )}
         </div>
