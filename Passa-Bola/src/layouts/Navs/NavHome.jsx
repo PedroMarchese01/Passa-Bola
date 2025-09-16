@@ -214,7 +214,7 @@ const NavHome = () => {
                           <Button
                             className="bg-purple-700 hover:bg-black/60 hover:border hover:border-white text-white px-4 py-2 rounded-lg shadow-md text-sm"
                             onClick={() => navigate("/jogos-mensais")}>
-                             Ver Resultados e Proximos jogos
+                             Ver Resultados e Próximos jogos
                           </Button>
                         </div>
                       </>
