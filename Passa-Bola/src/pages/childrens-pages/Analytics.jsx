@@ -38,7 +38,6 @@ const Analytics = () => {
     ? ((totalInscricoes / totalUsuarios) * 100).toFixed(2)
     : 0;
 
-  // Gráfico de usuários vs admins
   const usuariosAdminsData = {
     labels: ["Usuários", "Admins"],
     datasets: [
@@ -52,7 +51,6 @@ const Analytics = () => {
     ],
   };
 
-  // Gráfico percentual de participação geral
   const participacaoData = {
     labels: ["Inscritos", "Não inscritos"],
     datasets: [
@@ -65,7 +63,6 @@ const Analytics = () => {
     ],
   };
 
-  // Gráficos por evento
   const eventosData = events.map((event) => {
     const inscritos = event.inscritos?.length || 0;
     const max = event.maxInscritos || 1;

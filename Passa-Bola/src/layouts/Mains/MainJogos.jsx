@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import bgImg from "../../assets/hero2.jpg"; // fundo
+import bgImg from "../../assets/hero2.jpg"; 
 
 const storageKey = "eventsStorage";
 
@@ -14,29 +14,25 @@ const MainJogos = () => {
     phone: "",
   });
 
-  // 🚨 estado para alerta de login
   const [loginAlert, setLoginAlert] = useState(false);
 
   const menuRef = useRef(null);
   const navigate = useNavigate();
 
-  // helper para checar login (aceita 'logged' OU 'logged?')
   const isLogged = () => {
-    const v1 = localStorage.getItem("logged") === "true";
     const v2 = localStorage.getItem("logged?") === "true";
-    return v1 || v2;
+    return v2;
   };
 
-  // 🚨 Carregar jogos do localStorage
   useEffect(() => {
     const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
     const mensais = storedEvents.filter((e) => e.type === "mensal");
-    // converte para o formato que sua tela já usa
+    
     const formatted = mensais.map((e) => ({
       id: e.id,
       title: e.name,
       date: e.date,
-      time: e.time || "00:00", // fallback se não tiver hora
+      time: e.time || "00:00", 
       location: e.location,
       currentPlayers: e.inscritos?.length || 0,
       maxPlayers: e.maxInscritos || 0,
@@ -65,11 +61,9 @@ const MainJogos = () => {
     return { text: "Aberto", color: "bg-green-600" };
   };
 
-  // 🚨 Função de envio da inscrição
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Atualiza número de inscritos localmente
     setGames((prev) =>
       prev.map((g) =>
         g.id === selectedGame.id
@@ -78,7 +72,6 @@ const MainJogos = () => {
       )
     );
 
-    // Atualiza também no localStorage (para persistir)
     const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
     const updatedEvents = storedEvents.map((ev) =>
       ev.id === selectedGame.id
@@ -91,7 +84,7 @@ const MainJogos = () => {
       `✅ Inscrição confirmada!\nNome: ${registerData.name}\nEmail: ${registerData.email}\nJogo: ${selectedGame.title}`
     );
 
-    setSelectedGame(null); // fecha modal
+    setSelectedGame(null); 
   };
 
   return (
@@ -100,7 +93,6 @@ const MainJogos = () => {
       style={{ backgroundImage: `url(${bgImg})` }}
     >
       <div className="bg-black/80 min-h-screen rounded-2xl p-8 md:p-12 shadow-xl relative">
-        {/* Título */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white drop-shadow-lg">
             Jogos Mensais
@@ -113,10 +105,9 @@ const MainJogos = () => {
           </p>
         </div>
 
-        {/* 🚨 Alerta login */}
         {loginAlert && (
           <div className="mb-6">
-            <Alert className="bg-white/90 border-4 border-red-600 text-white">
+            <Alert className="bg-white/90 border-4 border-red-600 text-red-600">
               <AlertDescription>
                 ⚠️ Você precisa estar logado para se inscrever!
                 <button
@@ -130,7 +121,6 @@ const MainJogos = () => {
           </div>
         )}
 
-        {/* Grid de jogos */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedGames.map((game) => {
             const status = getStatus(game);
@@ -141,7 +131,6 @@ const MainJogos = () => {
                 key={game.id}
                 className="relative bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md border border-gray-700/30 hover:scale-105 hover:bg-white/10 transition-transform duration-300"
               >
-                {/* Status */}
                 <span
                   className={`absolute top-4 right-4 text-xs text-white px-3 py-1 rounded-full ${status.color}`}
                 >
@@ -160,7 +149,6 @@ const MainJogos = () => {
                   👥 {game.currentPlayers} / {game.maxPlayers} inscritos
                 </p>
 
-                {/* Barra de progresso */}
                 <div className="w-full bg-gray-700 rounded-full h-2 mb-4">
                   <div
                     className="bg-purple-500 h-2 rounded-full"
@@ -195,7 +183,6 @@ const MainJogos = () => {
           })}
         </div>
 
-        {/* 🚨 Modal de Inscrição */}
         {selectedGame && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
             <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
@@ -210,7 +197,7 @@ const MainJogos = () => {
                   onChange={(e) =>
                     setRegisterData({ ...registerData, name: e.target.value })
                   }
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
                 <input
@@ -220,7 +207,7 @@ const MainJogos = () => {
                   onChange={(e) =>
                     setRegisterData({ ...registerData, email: e.target.value })
                   }
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
                 <input
@@ -230,19 +217,19 @@ const MainJogos = () => {
                   onChange={(e) =>
                     setRegisterData({ ...registerData, phone: e.target.value })
                   }
-                  className="w-full p-2 border rounded"
+                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <div className="flex justify-between mt-4">
                   <button
                     type="button"
                     onClick={() => setSelectedGame(null)}
-                    className="px-4 py-2 rounded bg-gray-400 text-white hover:bg-gray-500"
+                    className="px-4 py-2 rounded bg-gray-400 text-white hover:bg-gray-500 transition"
                   >
                     Cancelar
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700"
+                    className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700 transition"
                   >
                     Confirmar
                   </button>

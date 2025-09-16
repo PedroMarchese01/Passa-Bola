@@ -62,7 +62,6 @@ const UsersAdminPanel = () => {
     .map((user) => ({ ...user, _realIndex: users.indexOf(user) }))
     .filter((u) => u.admin);
 
-  // Tabela para desktop
   const renderTable = (list, isAdminTable = false) => (
     <div className="hidden md:block overflow-hidden rounded-lg shadow-lg">
       <Table className="min-w-full bg-[#1f1f1f] border border-gray-700 rounded-lg">
@@ -140,7 +139,6 @@ const UsersAdminPanel = () => {
     </div>
   );
 
-  // Cards para mobile
   const renderCards = (list, isAdminTable = false) => (
     <div className="md:hidden grid gap-4">
       {list.map((user) => {

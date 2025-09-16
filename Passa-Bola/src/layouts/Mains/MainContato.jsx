@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import bgImg from "../../assets/hero12.png"; // fundo de contato
+import bgImg from "../../assets/hero12.png"; 
 
 const MainContato = () => {
   const [openCard, setOpenCard] = useState(null);
 
-  // Dados dos cards
   const cards = [
     {
       id: "endereco",
@@ -56,10 +55,8 @@ const MainContato = () => {
       className="pt-24 px-6 md:px-20 pb-16 min-h-screen bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${bgImg})` }}
     >
-      {/* Overlay global */}
       <div className="bg-black/50 min-h-screen rounded-2xl p-8 md:p-12 shadow-xl">
         
-        {/* Título */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white drop-shadow-lg">Contato</h1>
           <p className="text-lg text-gray-200 mt-4 max-w-2xl mx-auto">
@@ -69,12 +66,11 @@ const MainContato = () => {
           </p>
         </div>
 
-        {/* Grid de informações */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {cards.map((card) => (
             <div
               key={card.id}
-              onClick={() => setOpenCard(card)} // Abre modal
+              onClick={() => setOpenCard(card)}
               className="cursor-pointer bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md 
                          border border-gray-700/30 hover:scale-105 hover:bg-white/10 
                          transition-transform duration-300"
@@ -87,7 +83,6 @@ const MainContato = () => {
           ))}
         </div>
 
-        {/* Formulário de contato */}
         <div className="mt-12 bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md 
                         border border-gray-700/30 hover:scale-[1.01] hover:bg-white/10 
                         transition-transform duration-300">
@@ -136,7 +131,6 @@ const MainContato = () => {
         </div>
       </div>
 
-      {/* Modal (abre quando clicar em card) */}
       {openCard && (
         <div
           className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
@@ -144,7 +138,7 @@ const MainContato = () => {
         >
           <div
             className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-lg border border-purple-500/40 max-w-lg w-full mx-6 text-center"
-            onClick={(e) => e.stopPropagation()} // Evita fechar clicando dentro
+            onClick={(e) => e.stopPropagation()} 
           >
             <h2 className="text-2xl font-bold text-purple-400 mb-4">
               {openCard.title}

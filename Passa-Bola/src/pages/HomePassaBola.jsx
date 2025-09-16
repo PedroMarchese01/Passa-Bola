@@ -21,7 +21,6 @@ const HomePassaBola = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Fecha a sidebar quando a rota muda
   useEffect(() => {
     setSidebarOpen(false);
   }, [location.pathname]);
@@ -30,7 +29,6 @@ const HomePassaBola = () => {
     <SidebarProvider defaultOpen={sidebarOpen}>
       <div className="flex h-screen w-screen overflow-hidden relative">
 
-        {/* Sidebar */}
         <Sidebar
           side="left"
           variant="sidebar"
@@ -128,7 +126,6 @@ const HomePassaBola = () => {
           <SidebarFooter className="bg-[#1c1c1c] text-white p-4" />
         </Sidebar>
 
-        {/* Conteúdo principal flexível */}
         <div
           className={`flex-1 h-screen overflow-auto transition-all duration-300`}
           style={{ maxWidth: "100%" }}

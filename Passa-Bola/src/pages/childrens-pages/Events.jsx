@@ -14,7 +14,7 @@ const Events = () => {
   const [name, setName] = useState("");
   const [dateStart, setDateStart] = useState("");
   const [dateEnd, setDateEnd] = useState("");
-  const [time, setTime] = useState(""); // ⏰ novo estado
+  const [time, setTime] = useState(""); 
   const [location, setLocation] = useState("");
   const [maxInscritos, setMaxInscritos] = useState("");
 
@@ -35,7 +35,7 @@ const Events = () => {
   useEffect(() => {
     setDateStart("");
     setDateEnd("");
-    setTime(""); // limpa horário quando muda tipo
+    setTime(""); 
     setMaxInscritos("");
   }, [type]);
 
@@ -55,7 +55,7 @@ const Events = () => {
     if (
       !name ||
       !location ||
-      (type === "mensal" && (!dateStart || !time || !maxInscritos)) || // ⏰ horário obrigatório
+      (type === "mensal" && (!dateStart || !time || !maxInscritos)) || 
       (type === "campeonato" && (!dateStart || !dateEnd))
     ) {
       showAlert("Erro", "Preencha todos os campos obrigatórios!");
@@ -86,7 +86,7 @@ const Events = () => {
               dateStart: type === "campeonato" ? dateStart : undefined,
               dateEnd: type === "campeonato" ? dateEnd : undefined,
               date: type === "mensal" ? dateStart : undefined,
-              time: type === "mensal" ? time : undefined, // ⏰ salva horário
+              time: type === "mensal" ? time : undefined, 
               location,
               maxInscritos: type === "mensal" ? parseInt(maxInscritos) : undefined,
             }
@@ -105,7 +105,7 @@ const Events = () => {
         dateStart: type === "campeonato" ? dateStart : undefined,
         dateEnd: type === "campeonato" ? dateEnd : undefined,
         date: type === "mensal" ? dateStart : undefined,
-        time: type === "mensal" ? time : undefined, // ⏰ salva horário
+        time: type === "mensal" ? time : undefined, 
         brackets: [],
       };
 
@@ -115,7 +115,7 @@ const Events = () => {
     setName("");
     setDateStart("");
     setDateEnd("");
-    setTime(""); // limpa após salvar
+    setTime(""); 
     setLocation("");
     setMaxInscritos("");
   };
@@ -136,7 +136,7 @@ const Events = () => {
       setMaxInscritos("");
     } else {
       setDateStart(event.date);
-      setTime(event.time || ""); // ⏰ carrega horário
+      setTime(event.time || ""); 
       setMaxInscritos(event.maxInscritos || "");
     }
   };
@@ -158,7 +158,6 @@ const Events = () => {
       </div>
 
       <div className="flex-1 flex flex-col md:flex-row gap-6 p-6 overflow-hidden">
-        {/* Formulário */}
         <div className="md:w-1/3 bg-[#2c2c2c] p-4 rounded-lg flex flex-col gap-4 overflow-auto">
           <div className="flex gap-2">
             <select
@@ -214,7 +213,7 @@ const Events = () => {
                 className="bg-[#1c1c1c] text-white"
               />
               <Input
-                type="time" // ⏰ campo novo
+                type="time" 
                 placeholder="Horário do jogo"
                 value={time}
                 onChange={(e) => setTime(e.target.value)}
@@ -235,10 +234,7 @@ const Events = () => {
             {editingEvent ? "Salvar Alterações" : "Adicionar Evento"}
           </Button>
         </div>
-
-        {/* Listas de eventos */}
         <div className="md:w-2/3 flex flex-col gap-6 overflow-auto">
-          {/* Jogos Mensais */}
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-semibold">Jogos Mensais</h2>
             {jogosMensais.length === 0 ? (

@@ -23,23 +23,18 @@ const CadastroAdministradora = () => {
       return;
     }
 
-    // 🔹 Pega os usuários do localStorage
     const usersExistentes = JSON.parse(localStorage.getItem("users")) || [];
 
-    // 🔹 Verifica se já existe um usuário com o mesmo email
     const emailExistente = usersExistentes.find(user => user.email === email);
     if (emailExistente) {
       setAlert({ title: "Erro", description: "Já existe um usuário cadastrado com esse email." });
       return;
     }
 
-    // 🔹 Cria nova administradora
     const novaAdmin = { usuario, email, senha, admin: true };
 
-    // 🔹 Salva na lista de usuários
     localStorage.setItem("users", JSON.stringify([...usersExistentes, novaAdmin]));
 
-    // 🔹 Reseta campos e mostra alerta de sucesso
     setUsuario("");
     setEmail("");
     setSenha("");

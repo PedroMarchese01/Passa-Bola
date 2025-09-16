@@ -37,7 +37,6 @@ const Clima = () => {
   const [inicio, setInicio] = useState(0);
   const [selectedDate, setSelectedDate] = useState("");
 
-  // Função para buscar dados da API
   const fetchClima = async (startDate, endDate) => {
     try {
       const url = `https://api.open-meteo.com/v1/forecast?latitude=${cidade.lat}&longitude=${cidade.lon}&hourly=temperature_2m,weathercode&current_weather=true&timezone=America/Sao_Paulo&start_date=${startDate}&end_date=${endDate}`;
@@ -86,11 +85,11 @@ const Clima = () => {
     }
   };
 
-  // Carrega dados iniciais
+
   useEffect(() => {
     const hoje = new Date();
     const fim = new Date();
-    fim.setDate(fim.getDate() + 7); // Carrega 7 dias à frente
+    fim.setDate(fim.getDate() + 7); 
     fetchClima(hoje.toISOString().split("T")[0], fim.toISOString().split("T")[0]).finally(() => setLoading(false));
   }, [cidade]);
 
@@ -112,7 +111,6 @@ const Clima = () => {
     if (index !== -1) {
       setInicio(index);
     } else {
-      // Se ainda não carregou o dia, busca esse dia
       await fetchClima(selectedDate, selectedDate);
       const novoIndex = horarios.findIndex((h) => h.dataCompleta === selectedDate);
       if (novoIndex !== -1) setInicio(novoIndex);

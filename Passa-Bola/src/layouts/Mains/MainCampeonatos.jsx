@@ -64,16 +64,12 @@ const MainCampeonatos = () => {
 
   return (
     <div className="w-full min-h-screen bg-[#1c1c1c] text-white flex flex-col">
-      {/* Navbar */}
       <NavChildren/>
 
-      {/* Hero + Card sobreposto */}
       <div className="relative w-full h-[70vh] sm:h-[80vh] md:h-[90vh] lg:h-[95vh]">
 
-        {/* Overlay escuro */}
         <div className="absolute inset-0 bg-black/50"></div>
 
-        {/* Card centralizado sobre a imagem */}
         <div className="absolute inset-0 flex justify-center items-center px-4">
           {campeonato ? (
             <Card className="w-full max-w-3xl bg-gradient-to-r from-black/70 to-gray-800/70 border border-white/20 shadow-xl backdrop-blur-lg animate-fadeIn">

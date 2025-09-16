@@ -49,7 +49,6 @@ const NavHome = () => {
     };
   }, []);
 
-  // 🚨 Adiciona jogos de exemplo no localStorage se não houver nenhum
   useEffect(() => {
     const storageKey = "eventsStorage";
     const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
@@ -105,7 +104,6 @@ const NavHome = () => {
         </div>
       )}
 
-      {/* Navbar */}
       <nav
         className={`w-full h-16 fixed top-0 left-0 z-20 flex items-center justify-between px-8 transition-shadow duration-300 ${
           scrolled ? "bg-[#1c1c1c]/90 shadow-md backdrop-blur-sm" : "bg-[#1c1c1c]"
@@ -151,7 +149,6 @@ const NavHome = () => {
         </button>
       </nav>
 
-      {/* Dropdown Mobile */}
       {menuOpen && (
         <div className="md:hidden absolute top-16 left-0 w-full bg-[#1c1c1c] flex flex-col items-center gap-6 py-6 z-30">
           <Link to="/sobre" className="text-gray-300 hover:text-white transition-colors">Sobre</Link>
@@ -168,7 +165,6 @@ const NavHome = () => {
         </div>
       )}
 
-      {/* Carousel */}
       <div className="w-full h-full overflow-hidden">
         <Carousel opts={{ align: "start", loop: true }}>
           <CarouselContent>

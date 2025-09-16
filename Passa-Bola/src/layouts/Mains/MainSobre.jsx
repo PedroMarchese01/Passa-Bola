@@ -1,6 +1,6 @@
 import React from "react";
-import bgImg from "../../assets/hero8.png"; // fundo da página
-// import luanaImg from "../../assets/luana.png"; // exemplo de imagem local
+import bgImg from "../../assets/hero8.png"; 
+
 
 const MainSobre = () => {
   return (
@@ -8,18 +8,14 @@ const MainSobre = () => {
       className="mt-16 min-h-screen bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: `url(${bgImg})` }}
     >
-      {/* Overlay escura */}
       <div className="bg-black/70 min-h-screen px-6 md:px-12 py-12 flex flex-col gap-10">
         
-        {/* Título */}
         <h1 className="text-4xl font-bold text-white drop-shadow-lg">
           Sobre Nós
         </h1>
 
-        {/* Grid de cards responsivo */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-9 items-start">
           
-          {/* Card Missão */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition h-auto">
             <h2 className="text-xl font-semibold text-purple-400">Nossa Missão</h2>
             <p className="mt-2 text-gray-200 text-sm">
@@ -31,7 +27,6 @@ const MainSobre = () => {
             </p>
           </div>
 
-          {/* Card Visão */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition h-auto">
             <h2 className="text-xl font-semibold text-purple-400">Nossa Visão</h2>
             <p className="mt-2 text-gray-200 text-sm">
@@ -39,7 +34,6 @@ const MainSobre = () => {
             </p>
           </div>
 
-          {/* Card Valores */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition h-auto">
             <h2 className="text-xl font-semibold text-purple-400">Nossos Valores</h2>
             <ul className="mt-2 text-gray-200 text-sm space-y-1 list-disc list-inside">
@@ -56,7 +50,6 @@ const MainSobre = () => {
             </ul>
           </div>
 
-          {/* Card Time */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition h-auto">
             <h2 className="text-xl font-semibold text-purple-400">Nosso Time</h2>
             <div className="mt-4 flex flex-col gap-4">
@@ -87,7 +80,6 @@ const MainSobre = () => {
             </div>
           </div>
 
-          {/* Card Contato */}
           <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-lg hover:scale-105 transition h-auto md:col-span-2">
             <h2 className="text-xl font-semibold text-purple-400">Contato</h2>
             <p className="mt-2 text-gray-200 text-sm">📧 contato@passabola.com</p>
@@ -96,7 +88,6 @@ const MainSobre = () => {
           </div>
         </div>
 
-        {/* Rodapé */}
         <footer className="mt-12 text-center text-gray-400 text-sm border-t border-gray-600 pt-6">
           © {new Date().getFullYear()} Passa Bola. Todos os direitos reservados.
         </footer>

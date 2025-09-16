@@ -20,13 +20,11 @@ const NavSobre = () => {
 
   return (
     <>
-      {/* Navbar */}
       <nav
         className={`w-full h-16 fixed top-0 left-0 z-20 flex items-center justify-between px-8 transition-all duration-300 ${
           scrolled ? "bg-[#1c1c1c]/90 shadow-md backdrop-blur" : "bg-[#1c1c1c]"
         }`}
       >
-        {/* Logo + Nome */}
         <Link to="/" className="flex justify-center items-center gap-4">
           <div className="p-1 rounded-full bg-white">
             <img
@@ -38,7 +36,6 @@ const NavSobre = () => {
           <span className="text-white font-bold text-xl">Passa Bola</span>
         </Link>
 
-        {/* Links Desktop */}
         <div className="hidden md:flex gap-8">
           <Link
             to="/sobre"
@@ -66,7 +63,6 @@ const NavSobre = () => {
           </Link>
         </div>
 
-        {/* Login / Avatar */}
         <div className="hidden md:flex gap-4 items-center">
           {!isLogged ? (
             <Button
@@ -87,7 +83,6 @@ const NavSobre = () => {
           )}
         </div>
 
-        {/* Menu Mobile */}
         <button
           className="md:hidden text-white focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -96,7 +91,6 @@ const NavSobre = () => {
         </button>
       </nav>
 
-      {/* Dropdown Mobile */}
       {menuOpen && (
         <div className="md:hidden absolute top-16 left-0 w-full bg-[#1c1c1c] flex flex-col items-center gap-6 py-6 z-30">
           <Link

@@ -26,7 +26,7 @@ const MainLogin = () => {
     telefone: "",
     date: "",
   });
-  const [mostrarC, setMostrarC] = useState(false); // ✅ para mostrar senha cadastro
+  const [mostrarC, setMostrarC] = useState(false);
   const [cadastroMsg, setCadastroMsg] = useState(null);
 
   const [openModal, setOpenModal] = useState(false);
@@ -167,7 +167,6 @@ const MainLogin = () => {
       description: "Cadastro realizado com sucesso!",
     });
 
-    // Limpar campos
     setCadastro({
       nome: "",
       email: "",
@@ -276,7 +275,6 @@ const MainLogin = () => {
                 value={cadastro.email}
               />
 
-              {/* Senha */}
               <Input
                 placeholder="Senha"
                 type={mostrarC ? "text" : "password"}
@@ -294,7 +292,6 @@ const MainLogin = () => {
                 value={cadastro.confirmS}
               />
 
-              {/* Checkbox para mostrar senha */}
               <div className="flex items-center">
                 <Checkbox
                   id="mostrarSenhaCadastro"
@@ -330,7 +327,6 @@ const MainLogin = () => {
                 value={cadastro.date}
               />
 
-              {/* Modal centralizado */}
               <div className="flex items-center gap-2">
                 <Checkbox
                   id="aceitarTermos"
