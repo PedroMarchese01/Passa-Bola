@@ -93,7 +93,6 @@ const Events = () => {
           : e
       );
       saveEvents(updatedEvents);
-      setEditingEvent(null);
     } else {
       const newEvent = {
         id: Date.now(),
@@ -108,16 +107,16 @@ const Events = () => {
         time: type === "mensal" ? time : undefined, 
         brackets: [],
       };
-
       saveEvents([...events, newEvent]);
     }
 
     setName("");
+    setLocation("");
     setDateStart("");
     setDateEnd("");
-    setTime(""); 
-    setLocation("");
+    setTime("");
     setMaxInscritos("");
+    setEditingEvent(null);
   };
 
   const handleRemoveEvent = (id) => {
@@ -134,10 +133,12 @@ const Events = () => {
       setDateStart(event.dateStart);
       setDateEnd(event.dateEnd);
       setMaxInscritos("");
+      setTime("");
     } else {
       setDateStart(event.date);
       setTime(event.time || ""); 
       setMaxInscritos(event.maxInscritos || "");
+      setDateEnd("");
     }
   };
 
