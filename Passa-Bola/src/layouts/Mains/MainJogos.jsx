@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import bgImg from "../../assets/hero2.jpg"; 
+import bgImg from "../../assets/hero2.jpg";
 
 const storageKey = "eventsStorage";
 
@@ -13,26 +13,22 @@ const MainJogos = () => {
     email: "",
     phone: "",
   });
-
   const [loginAlert, setLoginAlert] = useState(false);
 
   const menuRef = useRef(null);
   const navigate = useNavigate();
 
-  const isLogged = () => {
-    const v2 = localStorage.getItem("logged?") === "true";
-    return v2;
-  };
+  const isLogged = () => localStorage.getItem("logged?") === "true";
 
   useEffect(() => {
     const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
     const mensais = storedEvents.filter((e) => e.type === "mensal");
-    
+
     const formatted = mensais.map((e) => ({
       id: e.id,
       title: e.name,
       date: e.date,
-      time: e.time || "00:00", 
+      time: e.time || "00:00",
       location: e.location,
       currentPlayers: e.inscritos?.length || 0,
       maxPlayers: e.maxInscritos || 0,
@@ -84,12 +80,12 @@ const MainJogos = () => {
       `Inscrição confirmada!\nNome: ${registerData.name}\nEmail: ${registerData.email}\nJogo: ${selectedGame.title}`
     );
 
-    setSelectedGame(null); 
+    setSelectedGame(null);
   };
 
   return (
     <div
-      className="pt-24 px-6 md:px-20 pb-16 min-h-screen bg-cover bg-center bg-no-repeat"
+      className="pt-24 px-6 md:px-20 pb-16 min-h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${bgImg})` }}
     >
       <div className="bg-black/80 min-h-screen rounded-2xl p-8 md:p-12 shadow-xl relative">
@@ -109,7 +105,7 @@ const MainJogos = () => {
           <div className="mb-6">
             <Alert className="bg-white/90 border-4 border-red-600 text-red-600">
               <AlertDescription>
-                 Você precisa estar logado para se inscrever!
+                Você precisa estar logado para se inscrever!
                 <button
                   onClick={() => navigate("/login")}
                   className="ml-3 underline text-purple-400 hover:text-purple-300"
@@ -124,7 +120,10 @@ const MainJogos = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedGames.map((game) => {
             const status = getStatus(game);
-            const progress = (game.currentPlayers / game.maxPlayers) * 100;
+            const progress = Math.min(
+              100,
+              Math.floor((game.currentPlayers / game.maxPlayers) * 100)
+            );
 
             return (
               <div
@@ -149,9 +148,9 @@ const MainJogos = () => {
                   👥 {game.currentPlayers} / {game.maxPlayers} inscritos
                 </p>
 
-                <div className="w-full bg-gray-700 rounded-full h-2 mb-4">
+                <div className="w-full bg-gray-700 rounded-full h-2 mb-4 overflow-hidden">
                   <div
-                    className="bg-purple-500 h-2 rounded-full"
+                    className={`h-2 rounded-full bg-purple-500`}
                     style={{ width: `${progress}%` }}
                   />
                 </div>
@@ -185,7 +184,7 @@ const MainJogos = () => {
 
         {selectedGame && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
-            <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-md">
+            <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-lg p-6 w-full max-w-md">
               <h2 className="text-2xl font-bold text-purple-600 mb-4">
                 Inscrição no {selectedGame.title}
               </h2>
@@ -197,7 +196,7 @@ const MainJogos = () => {
                   onChange={(e) =>
                     setRegisterData({ ...registerData, name: e.target.value })
                   }
-                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full p-3 border border-gray-600 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
                 <input
@@ -207,7 +206,7 @@ const MainJogos = () => {
                   onChange={(e) =>
                     setRegisterData({ ...registerData, email: e.target.value })
                   }
-                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full p-3 border border-gray-600 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                   required
                 />
                 <input
@@ -217,7 +216,7 @@ const MainJogos = () => {
                   onChange={(e) =>
                     setRegisterData({ ...registerData, phone: e.target.value })
                   }
-                  className="w-full p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className="w-full p-3 border border-gray-600 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
                 <div className="flex justify-between mt-4">
                   <button

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import bgImg from "../../assets/hero12.png"; 
+import bgImg from "../../assets/hero12.png";
 
 const MainContato = () => {
   const [openCard, setOpenCard] = useState(null);
@@ -51,21 +51,21 @@ const MainContato = () => {
   ];
 
   return (
-    <div
-      className="pt-24 px-6 md:px-20 pb-16 min-h-screen bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${bgImg})` }}
-    >
+    <div className="pt-24 px-6 md:px-20 pb-16 min-h-screen bg-[url('/src/assets/hero12.png')] bg-cover bg-center bg-no-repeat">
       <div className="bg-black/50 min-h-screen rounded-2xl p-8 md:p-12 shadow-xl">
         
+        {/* Cabeçalho */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-white drop-shadow-lg">Contato</h1>
           <p className="text-lg text-gray-200 mt-4 max-w-2xl mx-auto">
-            Entre em contato com a <span className="font-semibold text-purple-400">Passa Bola</span>! 
+            Entre em contato com a{" "}
+            <span className="font-semibold text-purple-400">Passa Bola</span>! 
             Estamos prontos para esclarecer dúvidas, receber sugestões e apoiar o 
             desenvolvimento do futebol feminino. 💜⚽
           </p>
         </div>
 
+        {/* Cards de contato */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {cards.map((card) => (
             <div
@@ -83,6 +83,7 @@ const MainContato = () => {
           ))}
         </div>
 
+        {/* Formulário */}
         <div className="mt-12 bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md 
                         border border-gray-700/30 hover:scale-[1.01] hover:bg-white/10 
                         transition-transform duration-300">
@@ -131,6 +132,7 @@ const MainContato = () => {
         </div>
       </div>
 
+      {/* Modal do card */}
       {openCard && (
         <div
           className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50"
@@ -138,7 +140,7 @@ const MainContato = () => {
         >
           <div
             className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-lg border border-purple-500/40 max-w-lg w-full mx-6 text-center"
-            onClick={(e) => e.stopPropagation()} 
+            onClick={(e) => e.stopPropagation()}
           >
             <h2 className="text-2xl font-bold text-purple-400 mb-4">
               {openCard.title}

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import NavChildren from "../Navs/NavChildren"
+import NavChildren from "../Navs/NavChildren";
 
 const MainCampeonatos = () => {
   const navigate = useNavigate();
@@ -64,20 +64,20 @@ const MainCampeonatos = () => {
 
   return (
     <div className="w-full min-h-screen bg-[#1c1c1c] text-white flex flex-col">
-      <NavChildren/>
+      <NavChildren />
 
-      <div className="relative w-full h-[70vh] sm:h-[80vh] md:h-[90vh] lg:h-[95vh]">
+      <div className="relative flex-1">
+        <div className="absolute inset-0 bg-black/50" />
 
-        <div className="absolute inset-0 bg-black/50"></div>
-
-        <div className="absolute inset-0 flex justify-center items-center px-4">
+        <div className="absolute inset-0 flex items-center justify-center px-4">
           {campeonato ? (
-            <Card className="w-full max-w-3xl bg-gradient-to-r from-black/70 to-gray-800/70 border border-white/20 shadow-xl backdrop-blur-lg animate-fadeIn">
-
+            <Card className="w-full max-w-3xl bg-gradient-to-r from-black/70 to-gray-800/70 border border-white/20 shadow-xl backdrop-blur-md animate-fadeIn">
               {alert && (
                 <Alert
                   className={`mb-6 ${
-                    alert.type === "error" ? "border-red-600" : "border-green-600"
+                    alert.type === "error"
+                      ? "border-red-600"
+                      : "border-green-600"
                   }`}
                 >
                   <AlertTitle>{alert.title}</AlertTitle>
@@ -86,11 +86,12 @@ const MainCampeonatos = () => {
               )}
 
               <CardHeader>
-                <CardTitle className="text-2xl text-white font-bold">
+                <CardTitle className="text-2xl font-bold text-white">
                   {campeonato.name}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-col gap-4 text-white">
+
+              <CardContent className="flex flex-col gap-3 text-gray-200">
                 <p>
                   <span className="font-semibold">Data de início:</span>{" "}
                   {campeonato.dateStart || "—"}
@@ -109,19 +110,18 @@ const MainCampeonatos = () => {
                 </p>
 
                 <Button
-                  className="bg-purple-600 hover:bg-purple-800 text-white text-lg mt-4 self-center w-full sm:w-auto"
                   onClick={handleInscricao}
+                  className="mt-4 bg-purple-600 hover:bg-purple-700 text-white text-lg px-6 py-2 self-center sm:self-start"
                 >
                   Inscrever-se agora
                 </Button>
               </CardContent>
             </Card>
-            ):    
-            (
+          ) : (
             <Card className="w-full max-w-2xl p-8 bg-black/80 border border-white/20 shadow-xl rounded-2xl text-center animate-fadeIn">
-                <p className="text-2xl sm:text-3xl md:text-4xl text-gray-300 font-semibold mb-6">
+              <p className="text-2xl sm:text-3xl md:text-4xl text-gray-300 font-semibold">
                 Nenhum campeonato disponível no momento.
-                </p>
+              </p>
             </Card>
           )}
         </div>
