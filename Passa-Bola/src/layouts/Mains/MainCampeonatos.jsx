@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import NavChildren from "../Navs/NavChildren";
+import NavChildren from "../Navs/Nav";
 
 const MainCampeonatos = () => {
   const navigate = useNavigate();

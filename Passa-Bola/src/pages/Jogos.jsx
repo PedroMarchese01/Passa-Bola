@@ -1,14 +1,14 @@
-import React from 'react'
-import NavJogos from '@/layouts/Navs/NavChildren'
-import MainJogos from '@/layouts/Mains/MainJogos'
+import React from "react";
+import NavJogos from "@/layouts/Navs/Nav";
+import MainJogos from "@/layouts/Mains/MainJogos";
 
 const Jogos = () => {
   return (
     <div>
-        <NavJogos/>
-        <MainJogos/>
+      <NavJogos />
+      <MainJogos />
     </div>
-  )
-}
+  );
+};
 
-export default Jogos
+export default Jogos;
