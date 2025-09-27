@@ -17,85 +17,9 @@ import logo from "../../assets/logo.png";
 
 const NavHome = () => {
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 10);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const handleClickLogin = () => {
-    const logged = localStorage.getItem("logged?");
-    if (logged === "true") {
-      return; 
-    }
-    navigate("/login");
-  };
 
   return (
-    <div className="w-screen min-h-screen relative flex flex-col overflow-x-hidden">
-      <nav
-        className={`w-full h-16 fixed top-0 left-0 z-20 flex items-center justify-between px-8 transition-shadow duration-300 ${
-          scrolled ? "bg-[#1c1c1c]/90 shadow-md backdrop-blur-sm" : "bg-[#1c1c1c]"
-        }`}
-      >
-        <div className="flex justify-center items-center gap-4">
-          <Link to="/">
-            <div className="p-1 rounded-full bg-white">
-              <img
-                src={logo}
-                alt="Logo Passa Bola"
-                className="h-6 sm:h-7 md:h-8 w-auto object-contain drop-shadow-[0_0_10px_white]"
-              />
-            </div>
-          </Link>
-          <Link to="/" className="text-white font-bold text-xl cursor-pointer">
-            Passa Bola
-          </Link>
-        </div>
-
-        <div className="hidden md:flex gap-8">
-          <Link to="/sobre" className="text-gray-300 hover:text-white transition-colors">Sobre</Link>
-          <Link to="/contato" className="text-gray-300 hover:text-white transition-colors">Contato</Link>
-          <Link to="/jogos-mensais" className="text-gray-300 hover:text-white transition-colors">Jogos Mensais</Link>
-          <Link to="/campeonatos" className="text-gray-300 hover:text-white transition-colors">Campeonatos</Link>
-        </div>
-
-        <div className="hidden md:flex gap-4">
-          <Button
-            variant="outline"
-            className="border-purple-700 text-purple-700 bg-transparent px-4 py-2 rounded-lg"
-            onClick={handleClickLogin}
-          >
-            Login
-          </Button>
-        </div>
-
-        <button
-          className="md:hidden text-white focus:outline-none text-2xl"
-          onClick={() => setMenuOpen(!menuOpen)}
-        >
-          ☰
-        </button>
-      </nav>
-
-      {menuOpen && (
-        <div className="md:hidden absolute top-16 left-0 w-full bg-[#1c1c1c] flex flex-col items-center gap-6 py-6 z-30">
-          <Link to="/sobre" className="text-gray-300 hover:text-white transition-colors">Sobre</Link>
-          <Link to="/contato" className="text-gray-300 hover:text-white transition-colors">Contato</Link>
-          <Link to="/jogos-mensais" className="text-gray-300 hover:text-white transition-colors">Jogos Mensais</Link>
-          <Link to="/campeonatos" className="text-gray-300 hover:text-white transition-colors">Campeonatos</Link>
-          <Button
-            variant="outline"
-            className="border-purple-700 text-purple-700 bg-transparent px-4 py-2 rounded-lg"
-            onClick={handleClickLogin}
-          >
-            Login
-          </Button>
-        </div>
-      )}
+    
 
       <div className="w-full flex-1 overflow-hidden mt-16">
         <Carousel opts={{ align: "start", loop: true }}>
@@ -169,7 +93,6 @@ const NavHome = () => {
           <CarouselNext className="absolute top-1/2 right-4 transform -translate-y-1/2 z-10 bg-black/40 text-white p-3 rounded-full hover:bg-black/60 transition-colors duration-300" />
         </Carousel>
       </div>
-    </div>
   );
 };
 
