@@ -100,10 +100,8 @@ const MainCampeonatos = () => {
       <NavChildren />
 
       <div className="flex-1 w-full flex items-center justify-center relative">
-        {/* Overlay */}
         <div className="absolute inset-0 bg-black/60" />
 
-        {/* Conteúdo principal */}
         <div className="relative w-full max-w-4xl px-4 py-8 overflow-auto flex justify-center items-start">
           {campeonato ? (
             <Card className="w-full bg-gradient-to-r from-black/70 to-gray-800/70 border border-white/20 shadow-xl backdrop-blur-md animate-fadeIn flex flex-col gap-6">
@@ -145,12 +143,14 @@ const MainCampeonatos = () => {
                 </p>
 
                 <div className="col-span-full flex flex-col sm:flex-row gap-4 mt-4 justify-start">
-                  <Button
-                    onClick={handleInscricao}
-                    className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-6 py-2 flex-1 sm:flex-none"
-                  >
-                    Inscrever-se agora
-                  </Button>
+                  {!isInscrita && (
+                    <Button
+                      onClick={handleInscricao}
+                      className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-6 py-2 flex-1 sm:flex-none"
+                    >
+                      Inscrever-se agora
+                    </Button>
+                  )}
 
                   {isInscrita && (
                     <>
