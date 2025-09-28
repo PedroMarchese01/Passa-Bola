@@ -7,7 +7,7 @@ import {
   Mail,
   Calendar,
   Trophy,
-} from "lucide-react"; // Ícones
+} from "lucide-react"; 
 import logo from "../../assets/logo.png";
 
 const NavSobre = () => {
@@ -26,7 +26,7 @@ const NavSobre = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Links da nav
+  
   const navLinks = [
     { to: "/", label: "Início", icon: <Home size={18} /> },
     { to: "/sobre", label: "Sobre", icon: <Info size={18} /> },
@@ -42,7 +42,7 @@ const NavSobre = () => {
           scrolled ? "bg-[#1c1c1c]/90 shadow-md backdrop-blur" : "bg-[#1c1c1c]"
         }`}
       >
-        {/* Logo */}
+        
         <Link to="/" className="flex justify-center items-center gap-4">
           <div className="p-1 rounded-full bg-white">
             <img
@@ -54,7 +54,7 @@ const NavSobre = () => {
           <span className="text-white font-bold text-xl">Passa Bola</span>
         </Link>
 
-        {/* Links Desktop */}
+      
         <div className="hidden md:flex gap-8 items-center">
           {navLinks.map((link) => (
             <Link
@@ -72,7 +72,7 @@ const NavSobre = () => {
           ))}
         </div>
 
-        {/* Login / Perfil */}
+      
         <div className="hidden md:flex gap-4 items-center">
           {!isLogged ? (
             <Button
@@ -93,7 +93,7 @@ const NavSobre = () => {
           )}
         </div>
 
-        {/* Botão Menu Mobile */}
+        
         <button
           className="md:hidden text-white focus:outline-none"
           onClick={() => setMenuOpen(!menuOpen)}
@@ -102,7 +102,7 @@ const NavSobre = () => {
         </button>
       </nav>
 
-      {/* Menu Mobile */}
+ 
       {menuOpen && (
         <div className="md:hidden absolute top-16 left-0 w-full bg-[#1c1c1c] flex flex-col items-center gap-6 py-6 z-30">
           {navLinks.map((link) => (
