@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,6 +29,12 @@ const MainLogin = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [aceitouTermos, setAceitouTermos] = useState(false);
+
+  const [isLogged, setIsLogged] = useState(false);
+
+  useEffect(() => {
+    setIsLogged(localStorage.getItem("logged?") === "true");
+  }, []);
 
   const handleLoginChange = (field, value) =>
     setLogin({ ...login, [field]: value });
@@ -74,8 +80,18 @@ const MainLogin = () => {
 
     if (userExist) {
       setError(null);
+
+      // Marca como logado
       localStorage.setItem("loggedUser", JSON.stringify(userExist));
-      localStorage.setItem("logged?", true);
+      localStorage.setItem("logged?", "true");
+
+      // 🔹 Salva dados individuais para usar no MainJogos
+      localStorage.setItem("userName", userExist.nome);
+      localStorage.setItem("userEmail", userExist.email);
+      localStorage.setItem("userPhone", userExist.telefone || "");
+
+      setIsLogged(true);
+
       if (userExist.admin) {
         navigate("/adminControlPainel");
       } else {
@@ -177,225 +193,251 @@ const MainLogin = () => {
     setAceitouTermos(false);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("logged?");
+    localStorage.removeItem("loggedUser");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("userPhone");
+    setIsLogged(false);
+    navigate("/login");
+  };
+
   return (
     <main className="flex flex-col justify-center items-center min-h-screen p-4">
       <div className="p-4 rounded-xl bg-white/10 backdrop-blur-lg shadow-sm border border-white/30 sm:w-60 w-50 md:w-100 lg:w-100 xl:w-100 max-w-md">
-        <Tabs defaultValue="Login" className="items-center w-full">
-          <TabsList className="bg-transparent border-1 border-white flex mb-4">
-            <TabsTrigger
-              value="Login"
-              className="text-white bg-transparent data-[state=active]:bg-purple-600 flex-1 text-center"
-            >
-              Login
-            </TabsTrigger>
-            <TabsTrigger
-              value="Cadastro"
-              className="text-white bg-transparent data-[state=active]:bg-purple-600 flex-1 text-center"
-            >
-              Cadastro
-            </TabsTrigger>
-          </TabsList>
+        {!isLogged ? (
+          <Tabs defaultValue="Login" className="items-center w-full">
+            <TabsList className="bg-transparent border-1 border-white flex mb-4">
+              <TabsTrigger
+                value="Login"
+                className="text-white bg-transparent data-[state=active]:bg-purple-600 flex-1 text-center"
+              >
+                Login
+              </TabsTrigger>
+              <TabsTrigger
+                value="Cadastro"
+                className="text-white bg-transparent data-[state=active]:bg-purple-600 flex-1 text-center"
+              >
+                Cadastro
+              </TabsTrigger>
+            </TabsList>
 
-          {/* ================= LOGIN ================= */}
-          <TabsContent value="Login" className="flex flex-col gap-4">
-            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-              <Input
-                placeholder="Email"
-                type="email"
-                className="text-white w-full"
-                autoComplete="email"
-                onChange={(e) => handleLoginChange("email", e.target.value)}
-                value={login.email}
-              />
-              <Input
-                placeholder="Senha"
-                type={mostrar ? "text" : "password"}
-                className="text-white w-full"
-                autoComplete="current-password"
-                onChange={(e) => handleLoginChange("senha", e.target.value)}
-                value={login.senha}
-              />
+            {/* LOGIN */}
+            <TabsContent value="Login" className="flex flex-col gap-4">
+              <form
+                className="flex flex-col gap-4"
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <Input
+                  placeholder="Email"
+                  type="email"
+                  className="text-white w-full"
+                  autoComplete="email"
+                  onChange={(e) => handleLoginChange("email", e.target.value)}
+                  value={login.email}
+                />
+                <Input
+                  placeholder="Senha"
+                  type={mostrar ? "text" : "password"}
+                  className="text-white w-full"
+                  autoComplete="current-password"
+                  onChange={(e) => handleLoginChange("senha", e.target.value)}
+                  value={login.senha}
+                />
 
-              <div className="flex justify-center items-center">
+                <div className="flex justify-center items-center">
+                  <div className="flex items-center">
+                    <Checkbox
+                      id="mostrarSenha"
+                      checked={mostrar}
+                      onCheckedChange={setMostrar}
+                    />
+                    <Label htmlFor="mostrarSenha" className="text-white">
+                      Mostrar senha
+                    </Label>
+                  </div>
+                </div>
+
+                <div className="flex justify-center">
+                  <Button
+                    className="hover:bg-purple-700 hover:text-white text-black bg-white"
+                    onClick={handleLogin}
+                  >
+                    Entrar
+                  </Button>
+                </div>
+              </form>
+
+              {error && (
+                <Alert
+                  variant="destructive"
+                  className="mt-4 border-4 border-red-700"
+                >
+                  <Terminal />
+                  <AlertTitle>{error.title}</AlertTitle>
+                  <AlertDescription>{error.description}</AlertDescription>
+                </Alert>
+              )}
+            </TabsContent>
+
+            {/* CADASTRO */}
+            <TabsContent value="Cadastro" className="flex flex-col gap-4">
+              <form
+                className="flex flex-col gap-4"
+                onSubmit={(e) => e.preventDefault()}
+              >
+                <Input
+                  placeholder="Nome Completo"
+                  className="text-white"
+                  onChange={(e) => handleCadastroChange("nome", e.target.value)}
+                  value={cadastro.nome}
+                />
+                <Input
+                  placeholder="Email"
+                  type="email"
+                  className="text-white"
+                  autoComplete="email"
+                  onChange={(e) => handleCadastroChange("email", e.target.value)}
+                  value={cadastro.email}
+                />
+                <Input
+                  placeholder="Senha"
+                  type={mostrarC ? "text" : "password"}
+                  className="text-white w-full"
+                  autoComplete="new-password"
+                  onChange={(e) => handleCadastroChange("senha", e.target.value)}
+                  value={cadastro.senha}
+                />
+                <Input
+                  placeholder="Confirme a senha"
+                  type={mostrarC ? "text" : "password"}
+                  className="text-white w-full"
+                  autoComplete="new-password"
+                  onChange={(e) =>
+                    handleCadastroChange("confirmS", e.target.value)
+                  }
+                  value={cadastro.confirmS}
+                />
                 <div className="flex items-center">
                   <Checkbox
-                    id="mostrarSenha"
-                    checked={mostrar}
-                    onCheckedChange={setMostrar}
+                    id="mostrarSenhaCadastro"
+                    checked={mostrarC}
+                    onCheckedChange={setMostrarC}
                   />
-                  <Label htmlFor="mostrarSenha" className="text-white">
+                  <Label htmlFor="mostrarSenhaCadastro" className="text-white">
                     Mostrar senha
                   </Label>
                 </div>
-              </div>
-
-              <button
-                type="button"
-                className="text-sm text-blue-400 underline hover:text-blue-300"
-              >
-                Esqueceu a senha?
-              </button>
-
-              <div className="flex justify-center">
-                <Button
-                  className="hover:bg-purple-700 hover:text-white text-black bg-white"
-                  onClick={handleLogin}
-                >
-                  Entrar
-                </Button>
-              </div>
-            </form>
-
-            {error && (
-              <Alert variant="destructive" className="mt-4 border-4 border-red-700">
-                <Terminal />
-                <AlertTitle>{error.title}</AlertTitle>
-                <AlertDescription>{error.description}</AlertDescription>
-              </Alert>
-            )}
-          </TabsContent>
-
-          {/* ================= CADASTRO ================= */}
-          <TabsContent value="Cadastro" className="flex flex-col gap-4">
-            <form className="flex flex-col gap-4" onSubmit={(e) => e.preventDefault()}>
-              <Input
-                placeholder="Nome Completo"
-                className="text-white"
-                onChange={(e) => handleCadastroChange("nome", e.target.value)}
-                value={cadastro.nome}
-              />
-              <Input
-                placeholder="Email"
-                type="email"
-                className="text-white"
-                autoComplete="email"
-                onChange={(e) => handleCadastroChange("email", e.target.value)}
-                value={cadastro.email}
-              />
-
-              <Input
-                placeholder="Senha"
-                type={mostrarC ? "text" : "password"}
-                className="text-white w-full"
-                autoComplete="new-password"
-                onChange={(e) => handleCadastroChange("senha", e.target.value)}
-                value={cadastro.senha}
-              />
-              <Input
-                placeholder="Confirme a senha"
-                type={mostrarC ? "text" : "password"}
-                className="text-white w-full"
-                autoComplete="new-password"
-                onChange={(e) => handleCadastroChange("confirmS", e.target.value)}
-                value={cadastro.confirmS}
-              />
-
-              <div className="flex items-center">
-                <Checkbox
-                  id="mostrarSenhaCadastro"
-                  checked={mostrarC}
-                  onCheckedChange={setMostrarC}
+                <Input
+                  placeholder="CPF"
+                  className="text-white"
+                  onChange={(e) => handleCadastroChange("cpf", e.target.value)}
+                  value={cadastro.cpf}
                 />
-                <Label htmlFor="mostrarSenhaCadastro" className="text-white">
-                  Mostrar senha
-                </Label>
-              </div>
-
-              <Input
-                placeholder="CPF"
-                className="text-white"
-                onChange={(e) => handleCadastroChange("cpf", e.target.value)}
-                value={cadastro.cpf}
-              />
-              <Input
-                placeholder="Telefone"
-                className="text-white"
-                type="text"
-                onChange={(e) => handleCadastroChange("telefone", e.target.value)}
-                value={cadastro.telefone}
-              />
-              <p className="text-white flex justify-center">
-                Insira a data de nascimento abaixo
-              </p>
-              <Input
-                placeholder="Data de nascimento"
-                type="date"
-                className="text-black appearance-none bg-white"
-                onChange={(e) => handleCadastroChange("date", e.target.value)}
-                value={cadastro.date}
-              />
-
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="aceitarTermos"
-                  checked={aceitouTermos}
-                  onCheckedChange={setAceitouTermos}
+                <Input
+                  placeholder="Telefone"
+                  className="text-white"
+                  type="text"
+                  onChange={(e) =>
+                    handleCadastroChange("telefone", e.target.value)
+                  }
+                  value={cadastro.telefone}
                 />
-                <Label htmlFor="aceitarTermos" className="text-white">
-                  Li e aceito os{" "}
-                  <button
-                    type="button"
-                    className="underline text-blue-400"
-                    onClick={() => setOpenModal(true)}
-                  >
-                    Termos
-                  </button>
-                </Label>
-              </div>
-
-              {openModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-                  <div className="bg-white text-black rounded-lg p-6 max-w-lg w-full shadow-lg relative">
-                    <h3 className="text-xl font-bold mb-4">Termos de Aceite</h3>
-                    <p className="mb-2">
-                      Antes de se cadastrar, você deve aceitar os seguintes termos:
-                    </p>
-                    <ul className="list-disc ml-5 space-y-1 mb-4 text-sm">
-                      <li>Seguindo a LGPD, seus dados serão tratados com segurança e confidencialidade.</li>
-                      <li>Não nos responsabilizamos por qualquer incidente ou acidente na ida à quadra.</li>
-                      <li>Somente jogadoras de sexo biológico feminino são aceitas.</li>
-                      <li>Qualquer tentativa de cadastro por indivíduos do sexo masculino ou fora das regras está sujeita a ação legal.</li>
-                      <li>O cadastro implica concordância com todas as regras da plataforma.</li>
-                      <li>O descumprimento das normas pode resultar em bloqueio ou penalidades.</li>
-                    </ul>
-                    <div className="flex justify-end gap-2 mt-4">
-                      <Button
-                        className="bg-gray-300 text-black hover:bg-gray-400"
-                        onClick={() => setOpenModal(false)}
-                      >
-                        Fechar
-                      </Button>
+                <p className="text-white flex justify-center">
+                  Insira a data de nascimento abaixo
+                </p>
+                <Input
+                  placeholder="Data de nascimento"
+                  type="date"
+                  className="text-black appearance-none bg-white"
+                  onChange={(e) => handleCadastroChange("date", e.target.value)}
+                  value={cadastro.date}
+                />
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="aceitarTermos"
+                    checked={aceitouTermos}
+                    onCheckedChange={setAceitouTermos}
+                  />
+                  <Label htmlFor="aceitarTermos" className="text-white">
+                    Li e aceito os{" "}
+                    <button
+                      type="button"
+                      className="underline text-blue-400"
+                      onClick={() => setOpenModal(true)}
+                    >
+                      Termos
+                    </button>
+                  </Label>
+                </div>
+                {openModal && (
+                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+                    <div className="bg-white text-black rounded-lg p-6 max-w-lg w-full shadow-lg relative">
+                      <h3 className="text-xl font-bold mb-4">Termos de Aceite</h3>
+                      <p className="mb-2">
+                        Antes de se cadastrar, você deve aceitar os seguintes termos:
+                      </p>
+                      <ul className="list-disc ml-5 space-y-1 mb-4 text-sm">
+                        <li>Seguindo a LGPD, seus dados serão tratados com segurança.</li>
+                        <li>Não nos responsabilizamos por acidentes na ida à quadra.</li>
+                        <li>Apenas jogadoras de sexo biológico feminino são aceitas.</li>
+                        <li>O cadastro implica concordância com as regras da plataforma.</li>
+                      </ul>
+                      <div className="flex justify-end gap-2 mt-4">
+                        <Button
+                          className="bg-gray-300 text-black hover:bg-gray-400"
+                          onClick={() => setOpenModal(false)}
+                        >
+                          Fechar
+                        </Button>
+                      </div>
                     </div>
                   </div>
+                )}
+                <div className="flex justify-center">
+                  <Button
+                    className="hover:bg-purple-700 hover:text-white bg-white text-black"
+                    onClick={handleCadastro}
+                  >
+                    Cadastrar
+                  </Button>
                 </div>
-              )}
-
-              <div className="flex justify-center">
-                <Button
-                  className="hover:bg-purple-700 hover:text-white bg-white text-black"
-                  onClick={handleCadastro}
+              </form>
+              {cadastroMsg && (
+                <Alert
+                  variant={
+                    cadastroMsg.title === "Sucesso" ? "default" : "destructive"
+                  }
+                  className={`mt-4 border-4 ${
+                    cadastroMsg.title === "Sucesso"
+                      ? "border-green-700"
+                      : "border-red-700"
+                  }`}
                 >
-                  Cadastrar
-                </Button>
-              </div>
-            </form>
-
-            {cadastroMsg && (
-              <Alert
-                variant={cadastroMsg.title === "Sucesso" ? "default" : "destructive"}
-                className={`mt-4 border-4 ${
-                  cadastroMsg.title === "Sucesso"
-                    ? "border-green-700"
-                    : "border-red-700"
-                }`}
-              >
-                <Terminal />
-                <AlertTitle>{cadastroMsg.title}</AlertTitle>
-                <AlertDescription>{cadastroMsg.description}</AlertDescription>
-              </Alert>
-            )}
-          </TabsContent>
-        </Tabs>
+                  <Terminal />
+                  <AlertTitle>{cadastroMsg.title}</AlertTitle>
+                  <AlertDescription>{cadastroMsg.description}</AlertDescription>
+                </Alert>
+              )}
+            </TabsContent>
+          </Tabs>
+        ) : (
+          <div className="flex flex-col gap-4 items-center">
+            <p className="text-white text-lg">
+              Você já está logado como{" "}
+              <span className="font-bold text-purple-400">
+                {localStorage.getItem("userName")}
+              </span>
+            </p>
+            <Button
+              className="bg-red-600 text-white hover:bg-red-700"
+              onClick={handleLogout}
+            >
+              Sair
+            </Button>
+          </div>
+        )}
       </div>
     </main>
   );

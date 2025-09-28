@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import bgImg from "../../assets/hero12.png";
+
 
 const MainContato = () => {
   const [openCard, setOpenCard] = useState(null);

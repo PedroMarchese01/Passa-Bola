@@ -10,6 +10,7 @@ import Users from "@/pages/childrens-pages/Users"
 import Sobre from "../pages/sobre";
 import Contato from "../pages/Contato";
 import Jogos from "../pages/Jogos";
+import Perfil from "../pages/Perfil";
 
 
 
@@ -65,7 +66,12 @@ const Router = createBrowserRouter([
   {
     path: "/jogos-mensais",
     element: <Jogos/>
+  },
+  {
+    path: "/perfil",
+    element: <Perfil/>
   }
+
   
 
 ]);

@@ -20,6 +20,7 @@ const MainJogos = () => {
 
   const isLogged = () => localStorage.getItem("logged?") === "true";
 
+  // Carregar jogos
   useEffect(() => {
     const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
     const mensais = storedEvents.filter((e) => e.type === "mensal");
@@ -54,7 +55,7 @@ const MainJogos = () => {
           time: "15:30",
           location: "PlayBall Arena (Quadra 2)",
           inscritos: [],
-          maxInscritos: 2,
+          maxInscritos: 20,
         },
         {
           id: "ex3",
@@ -64,13 +65,11 @@ const MainJogos = () => {
           time: "10:00",
           location: "PlayBall Arena (Quadra 3)",
           inscritos: [],
-          maxInscritos: 0,
+          maxInscritos: 20,
         },
       ];
 
-
       localStorage.setItem(storageKey, JSON.stringify(exemplos));
-
 
       setGames(
         exemplos.map((e) => ({
@@ -213,12 +212,54 @@ const MainJogos = () => {
                       setLoginAlert(true);
                       return;
                     }
-                    setRegisterData({
-                      name: localStorage.getItem("userName") || "",
-                      email: localStorage.getItem("userEmail") || "",
-                      phone: "",
-                    });
-                    setSelectedGame(game);
+
+                    // 🔹 Pega dados do usuário logado
+                    const userName = localStorage.getItem("userName") || "";
+                    const userEmail = localStorage.getItem("userEmail") || "";
+                    const userPhone = localStorage.getItem("userPhone") || "";
+
+                    if (userName && userEmail) {
+                      // Inscrição direta sem formulário
+                      setRegisterData({
+                        name: userName,
+                        email: userEmail,
+                        phone: userPhone,
+                      });
+
+                      setGames((prev) =>
+                        prev.map((g) =>
+                          g.id === game.id
+                            ? {
+                                ...g,
+                                currentPlayers: g.currentPlayers + 1,
+                              }
+                            : g
+                        )
+                      );
+
+                      const storedEvents =
+                        JSON.parse(localStorage.getItem(storageKey)) || [];
+                      const updatedEvents = storedEvents.map((ev) =>
+                        ev.id === game.id
+                          ? {
+                              ...ev,
+                              inscritos: [...(ev.inscritos || []), userName],
+                            }
+                          : ev
+                      );
+                      localStorage.setItem(
+                        storageKey,
+                        JSON.stringify(updatedEvents)
+                      );
+
+                      alert(
+                        `Inscrição confirmada!\nNome: ${userName}\nEmail: ${userEmail}\nJogo: ${game.title}`
+                      );
+                    } else {
+                      // Se não tiver dados salvos, abre formulário
+                      setRegisterData({ name: "", email: "", phone: "" });
+                      setSelectedGame(game);
+                    }
                   }}
                   disabled={status.text === "Encerrado"}
                   className={`w-full py-2 rounded-lg font-semibold transition ${
@@ -234,6 +275,7 @@ const MainJogos = () => {
           })}
         </div>
 
+        {/* Modal de fallback caso falte dados */}
         {selectedGame && (
           <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
             <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-lg p-6 w-full max-w-md">
