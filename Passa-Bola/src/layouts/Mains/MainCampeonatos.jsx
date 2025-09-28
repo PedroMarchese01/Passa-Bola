@@ -3,13 +3,24 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import NavChildren from "../Navs/Nav";
+import heroBg from "../../assets/hero4.png";
 
 const MainCampeonatos = () => {
   const navigate = useNavigate();
   const [campeonato, setCampeonato] = useState(null);
   const [inscritas, setInscritas] = useState([]);
   const [alert, setAlert] = useState(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [loggedUser, setLoggedUser] = useState(null);
 
   useEffect(() => {
     const stored = JSON.parse(localStorage.getItem("eventsStorage")) || [];
@@ -18,12 +29,12 @@ const MainCampeonatos = () => {
       setCampeonato(campeonatoAtivo);
       setInscritas(campeonatoAtivo.inscritos || []);
     }
+    const user = JSON.parse(localStorage.getItem("loggedUser"));
+    setLoggedUser(user);
   }, []);
 
   const handleInscricao = () => {
-    const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
     const isLogged = localStorage.getItem("logged?");
-
     if (!isLogged || !loggedUser) {
       setAlert({
         title: "Login necessário",
@@ -33,9 +44,7 @@ const MainCampeonatos = () => {
       setTimeout(() => navigate("/login"), 1500);
       return;
     }
-
     const userId = loggedUser.cpf || loggedUser.email;
-
     if (inscritas.includes(userId)) {
       setAlert({
         title: "Atenção",
@@ -44,7 +53,6 @@ const MainCampeonatos = () => {
       });
       return;
     }
-
     const novaLista = [...inscritas, userId];
     setInscritas(novaLista);
 
@@ -54,7 +62,6 @@ const MainCampeonatos = () => {
       stored[campeonatoIndex].inscritos = novaLista;
       localStorage.setItem("eventsStorage", JSON.stringify(stored));
     }
-
     setAlert({
       title: "Sucesso",
       description: "Inscrição realizada com sucesso!",
@@ -62,19 +69,47 @@ const MainCampeonatos = () => {
     });
   };
 
+  const handleDesinscricao = () => {
+    if (!loggedUser) return;
+    const userId = loggedUser.cpf || loggedUser.email;
+    const novaLista = inscritas.filter((id) => id !== userId);
+    setInscritas(novaLista);
+
+    const stored = JSON.parse(localStorage.getItem("eventsStorage")) || [];
+    const campeonatoIndex = stored.findIndex((e) => e.type === "campeonato");
+    if (campeonatoIndex !== -1) {
+      stored[campeonatoIndex].inscritos = novaLista;
+      localStorage.setItem("eventsStorage", JSON.stringify(stored));
+    }
+    setAlert({
+      title: "Sucesso",
+      description: "Você foi desinscrita do campeonato.",
+      type: "success",
+    });
+    setConfirmOpen(false);
+  };
+
+  const userId = loggedUser?.cpf || loggedUser?.email;
+  const isInscrita = inscritas.includes(userId);
+
   return (
-    <div className="w-full min-h-screen bg-[#1c1c1c] text-white flex flex-col">
+    <div
+      className="w-full min-h-screen flex flex-col bg-cover bg-center"
+      style={{ backgroundImage: `url(${heroBg})` }}
+    >
       <NavChildren />
 
-      <div className="relative flex-1">
-        <div className="absolute inset-0 bg-black/50" />
+      <div className="flex-1 w-full flex items-center justify-center relative">
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/60" />
 
-        <div className="absolute inset-0 flex items-center justify-center px-4">
+        {/* Conteúdo principal */}
+        <div className="relative w-full max-w-4xl px-4 py-8 overflow-auto flex justify-center items-start">
           {campeonato ? (
-            <Card className="w-full max-w-3xl bg-gradient-to-r from-black/70 to-gray-800/70 border border-white/20 shadow-xl backdrop-blur-md animate-fadeIn">
+            <Card className="w-full bg-gradient-to-r from-black/70 to-gray-800/70 border border-white/20 shadow-xl backdrop-blur-md animate-fadeIn flex flex-col gap-6">
               {alert && (
                 <Alert
-                  className={`mb-6 ${
+                  className={`${
                     alert.type === "error"
                       ? "border-red-600"
                       : "border-green-600"
@@ -91,7 +126,7 @@ const MainCampeonatos = () => {
                 </CardTitle>
               </CardHeader>
 
-              <CardContent className="flex flex-col gap-3 text-gray-200">
+              <CardContent className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-200">
                 <p>
                   <span className="font-semibold">Data de início:</span>{" "}
                   {campeonato.dateStart || "—"}
@@ -109,12 +144,53 @@ const MainCampeonatos = () => {
                   {inscritas.length}/{campeonato.maxInscritos || "∞"}
                 </p>
 
-                <Button
-                  onClick={handleInscricao}
-                  className="mt-4 bg-purple-600 hover:bg-purple-700 text-white text-lg px-6 py-2 self-center sm:self-start"
-                >
-                  Inscrever-se agora
-                </Button>
+                <div className="col-span-full flex flex-col sm:flex-row gap-4 mt-4 justify-start">
+                  <Button
+                    onClick={handleInscricao}
+                    className="bg-purple-600 hover:bg-purple-700 text-white text-lg px-6 py-2 flex-1 sm:flex-none"
+                  >
+                    Inscrever-se agora
+                  </Button>
+
+                  {isInscrita && (
+                    <>
+                      <Button
+                        variant="destructive"
+                        onClick={() => setConfirmOpen(true)}
+                        className="text-lg px-6 py-2 flex-1 sm:flex-none"
+                      >
+                        Desinscrever-se
+                      </Button>
+
+                      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>
+                              Deseja realmente se desinscrever?
+                            </DialogTitle>
+                            <DialogDescription>
+                              Você perderá sua vaga neste campeonato.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter className="flex justify-end gap-2">
+                            <Button
+                              variant="outline"
+                              onClick={() => setConfirmOpen(false)}
+                            >
+                              Cancelar
+                            </Button>
+                            <Button
+                              className="bg-red-600 hover:bg-red-700 text-white"
+                              onClick={handleDesinscricao}
+                            >
+                              Confirmar
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </>
+                  )}
+                </div>
               </CardContent>
             </Card>
           ) : (
