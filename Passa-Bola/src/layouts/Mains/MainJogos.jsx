@@ -1,336 +1,176 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import bgImg from "../../assets/hero2.jpg";
 
 const storageKey = "eventsStorage";
 
 const MainJogos = () => {
   const [games, setGames] = useState([]);
-  const [selectedGame, setSelectedGame] = useState(null);
-  const [registerData, setRegisterData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
-  const [loginAlert, setLoginAlert] = useState(false);
-
-  const menuRef = useRef(null);
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [confirmUnregister, setConfirmUnregister] = useState(null);
   const navigate = useNavigate();
 
   const isLogged = () => localStorage.getItem("logged?") === "true";
+  const userName = localStorage.getItem("userName") || "";
 
   // Carregar jogos
   useEffect(() => {
     const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
     const mensais = storedEvents.filter((e) => e.type === "mensal");
 
-    const formatted = mensais.map((e) => ({
-      id: e.id,
-      title: e.name,
-      date: e.date,
-      time: e.time || "00:00",
-      location: e.location,
-      currentPlayers: e.inscritos?.length || 0,
-      maxPlayers: e.maxInscritos || 0,
-    }));
-
-    if (formatted.length === 0) {
+    if (mensais.length === 0) {
       const exemplos = [
-        {
-          id: "ex1",
-          type: "mensal",
-          name: "Jogo Feminino - Outubro",
-          date: "2025-10-20",
-          time: "18:00",
-          location: "PlayBall Arena (Quadra 1)",
-          inscritos: [],
-          maxInscritos: 20,
-        },
-        {
-          id: "ex2",
-          type: "mensal",
-          name: "Jogo Feminino - Novembro",
-          date: "2025-11-15",
-          time: "15:30",
-          location: "PlayBall Arena (Quadra 2)",
-          inscritos: [],
-          maxInscritos: 20,
-        },
-        {
-          id: "ex3",
-          type: "mensal",
-          name: "Jogo Feminino - Dezembro",
-          date: "2025-12-10",
-          time: "10:00",
-          location: "PlayBall Arena (Quadra 3)",
-          inscritos: [],
-          maxInscritos: 20,
-        },
+        { id: "ex1", type: "mensal", name: "Jogo Feminino - Outubro", date: "2025-10-20", time: "18:00", location: "PlayBall Arena (Quadra 1)", inscritos: [], maxInscritos: 20 },
+        { id: "ex2", type: "mensal", name: "Jogo Feminino - Novembro", date: "2025-11-15", time: "15:30", location: "PlayBall Arena (Quadra 2)", inscritos: [], maxInscritos: 20 },
+        { id: "ex3", type: "mensal", name: "Jogo Feminino - Dezembro", date: "2025-12-10", time: "10:00", location: "PlayBall Arena (Quadra 3)", inscritos: [], maxInscritos: 20 },
       ];
-
       localStorage.setItem(storageKey, JSON.stringify(exemplos));
-
-      setGames(
-        exemplos.map((e) => ({
-          id: e.id,
-          title: e.name,
-          date: e.date,
-          time: e.time,
-          location: e.location,
-          currentPlayers: 0,
-          maxPlayers: e.maxInscritos,
-        }))
-      );
+      setGames(exemplos);
     } else {
-      setGames(formatted);
+      setGames(mensais);
     }
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target))
-        setLoginAlert(false);
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const sortedGames = [...games].sort((a, b) => new Date(a.date) - new Date(b.date));
 
-  const sortedGames = [...games].sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
-  );
+  const handleClick = (game) => {
+    // Limpar outros alertas
+    setAlertMessage(null);
+    setConfirmUnregister(null);
 
-  const getStatus = (g) => {
-    if (g.currentPlayers >= g.maxPlayers)
-      return { text: "Encerrado", color: "bg-red-600" };
-    if (g.currentPlayers >= g.maxPlayers - 3)
-      return { text: "Quase cheio", color: "bg-yellow-500" };
-    return { text: "Aberto", color: "bg-green-600" };
-  };
+    if (!isLogged()) {
+      setAlertMessage({ type: "error", message: "Você precisa estar logado para se inscrever!" });
+      return;
+    }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    if (game.inscritos.includes(userName)) {
+      setConfirmUnregister(game); // abre confirmação
+      return;
+    }
 
-    setGames((prev) =>
-      prev.map((g) =>
-        g.id === selectedGame.id
-          ? { ...g, currentPlayers: g.currentPlayers + 1 }
-          : g
-      )
+    // Inscrição normal
+    const updatedGames = games.map((g) =>
+      g.id === game.id ? { ...g, inscritos: [...g.inscritos, userName] } : g
     );
+    setGames(updatedGames);
 
     const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
     const updatedEvents = storedEvents.map((ev) =>
-      ev.id === selectedGame.id
-        ? { ...ev, inscritos: [...(ev.inscritos || []), registerData.name] }
-        : ev
+      ev.id === game.id ? { ...ev, inscritos: [...(ev.inscritos || []), userName] } : ev
     );
     localStorage.setItem(storageKey, JSON.stringify(updatedEvents));
 
-    alert(
-      `Inscrição confirmada!\nNome: ${registerData.name}\nEmail: ${registerData.email}\nJogo: ${selectedGame.title}`
-    );
+    setAlertMessage({ type: "success", message: `Inscrição confirmada em ${game.name}!` });
+  };
 
-    setSelectedGame(null);
+  const handleConfirmUnregister = () => {
+    const game = confirmUnregister;
+    if (!game) return;
+
+    // Limpar alertas anteriores
+    setAlertMessage(null);
+
+    const updatedGames = games.map((g) =>
+      g.id === game.id ? { ...g, inscritos: g.inscritos.filter((n) => n !== userName) } : g
+    );
+    setGames(updatedGames);
+
+    const storedEvents = JSON.parse(localStorage.getItem(storageKey)) || [];
+    const updatedEvents = storedEvents.map((ev) =>
+      ev.id === game.id ? { ...ev, inscritos: ev.inscritos.filter((n) => n !== userName) } : ev
+    );
+    localStorage.setItem(storageKey, JSON.stringify(updatedEvents));
+
+    setAlertMessage({ type: "desist", message: `Você se desinscreveu de ${game.name}.` });
+    setConfirmUnregister(null);
   };
 
   return (
-    <div
-      className="pt-24 px-6 md:px-20 pb-16 min-h-screen bg-cover bg-center"
-      style={{ backgroundImage: `url(${bgImg})` }}
-    >
+    <div className="pt-24 px-6 md:px-20 pb-16 min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${bgImg})` }}>
       <div className="bg-black/80 min-h-screen rounded-2xl p-8 md:p-12 shadow-xl relative">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-white drop-shadow-lg">
-            Jogos Mensais
-          </h1>
+          <h1 className="text-4xl font-bold text-white drop-shadow-lg">Jogos Mensais</h1>
           <p className="text-lg text-gray-200 mt-4 max-w-2xl mx-auto">
-            Participe dos{" "}
-            <span className="font-semibold text-purple-400">Jogos Mensais</span>{" "}
-            da Passa Bola! Uma oportunidade de jogar, se divertir, conhecer
-            novas jogadoras e competir de forma saudável. ⚽💜
+            Participe dos <span className="font-semibold text-purple-400">Jogos Mensais</span> da Passa Bola! ⚽💜
           </p>
         </div>
 
-        {loginAlert && (
+        {/* ALERTAS */}
+        {alertMessage && (
           <div className="mb-6">
-            <Alert className="bg-white/90 border-4 border-red-600 text-red-600">
-              <AlertDescription>
-                Você precisa estar logado para se inscrever!
-                <button
-                  onClick={() => navigate("/login")}
-                  className="ml-3 underline text-purple-400 hover:text-purple-300"
-                >
-                  Ir para Login
-                </button>
-              </AlertDescription>
+            <Alert
+              className={`border-2 ${alertMessage.type === "error" ? "border-red-600" : alertMessage.type === "desist" ? "border-red-500" : "border-green-600"} bg-black/30 backdrop-blur-sm text-white`}
+            >
+              <AlertTitle>{alertMessage.type === "error" ? "Erro" : "Aviso"}</AlertTitle>
+              <AlertDescription>{alertMessage.message}</AlertDescription>
             </Alert>
           </div>
         )}
 
+        {confirmUnregister && (
+          <Alert className="border-2 border-red-600 text-white bg-black/30 backdrop-blur-sm mb-6">
+            <AlertTitle>Confirmação de desinscrição</AlertTitle>
+            <AlertDescription>
+              Deseja realmente se desinscrever de <b>{confirmUnregister.name}</b>?
+              <div className="mt-2 flex gap-2">
+                <Button variant="destructive" onClick={handleConfirmUnregister}>Sim</Button>
+                <Button variant="outline" onClick={() => setConfirmUnregister(null)}>Cancelar</Button>
+              </div>
+            </AlertDescription>
+          </Alert>
+        )}
+
+        {/* LISTAGEM DE JOGOS */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {sortedGames.map((game) => {
-            const status = getStatus(game);
-            const progress = Math.min(
-              100,
-              Math.floor((game.currentPlayers / game.maxPlayers) * 100)
-            );
+            const progress = Math.min(100, Math.floor((game.inscritos.length / game.maxInscritos) * 100));
+            const buttonText = game.inscritos.includes(userName) ? "Desinscrever" : "Inscrever-se";
 
             return (
-              <div
-                key={game.id}
-                className="relative bg-white/5 backdrop-blur-lg rounded-2xl p-6 shadow-md border border-gray-700/30 hover:scale-105 hover:bg-white/10 transition-transform duration-300"
-              >
-                <span
-                  className={`absolute top-4 right-4 text-xs text-white px-3 py-1 rounded-full ${status.color}`}
-                >
-                  {status.text}
-                </span>
-
-                <h2 className="text-2xl font-semibold text-purple-400 mb-4">
-                  {game.title}
-                </h2>
-                <p className="text-gray-200 mb-2">
-                  📅 {new Date(game.date).toLocaleDateString("pt-BR")}
-                </p>
-                <p className="text-gray-200 mb-2">⏰ {game.time}</p>
-                <p className="text-gray-200 mb-2">📍 {game.location}</p>
-                <p className="text-gray-200 mb-2">
-                  👥 {game.currentPlayers} / {game.maxPlayers} inscritos
-                </p>
-
-                <div className="w-full bg-gray-700 rounded-full h-2 mb-4 overflow-hidden">
-                  <div
-                    className={`h-2 rounded-full bg-purple-500`}
-                    style={{ width: `${progress}%` }}
-                  />
-                </div>
-
-                <button
-                  onClick={() => {
-                    if (!isLogged()) {
-                      setLoginAlert(true);
-                      return;
-                    }
-
-                    // 🔹 Pega dados do usuário logado
-                    const userName = localStorage.getItem("userName") || "";
-                    const userEmail = localStorage.getItem("userEmail") || "";
-                    const userPhone = localStorage.getItem("userPhone") || "";
-
-                    if (userName && userEmail) {
-                      // Inscrição direta sem formulário
-                      setRegisterData({
-                        name: userName,
-                        email: userEmail,
-                        phone: userPhone,
-                      });
-
-                      setGames((prev) =>
-                        prev.map((g) =>
-                          g.id === game.id
-                            ? {
-                                ...g,
-                                currentPlayers: g.currentPlayers + 1,
-                              }
-                            : g
-                        )
-                      );
-
-                      const storedEvents =
-                        JSON.parse(localStorage.getItem(storageKey)) || [];
-                      const updatedEvents = storedEvents.map((ev) =>
-                        ev.id === game.id
-                          ? {
-                              ...ev,
-                              inscritos: [...(ev.inscritos || []), userName],
-                            }
-                          : ev
-                      );
-                      localStorage.setItem(
-                        storageKey,
-                        JSON.stringify(updatedEvents)
-                      );
-
-                      alert(
-                        `Inscrição confirmada!\nNome: ${userName}\nEmail: ${userEmail}\nJogo: ${game.title}`
-                      );
-                    } else {
-                      // Se não tiver dados salvos, abre formulário
-                      setRegisterData({ name: "", email: "", phone: "" });
-                      setSelectedGame(game);
-                    }
-                  }}
-                  disabled={status.text === "Encerrado"}
-                  className={`w-full py-2 rounded-lg font-semibold transition ${
-                    status.text === "Encerrado"
-                      ? "bg-gray-600 text-gray-400 cursor-not-allowed"
-                      : "bg-purple-600 hover:bg-purple-700 text-white"
-                  }`}
-                >
-                  Inscreva-se
-                </button>
-              </div>
+              <Card key={game.id} className="relative bg-white/5 backdrop-blur-lg rounded-2xl shadow-md border border-gray-700/30 hover:scale-105 hover:bg-white/10 transition-transform duration-300">
+                <CardHeader>
+                  <CardTitle className="text-purple-400">{game.name}</CardTitle>
+                  <span className={`absolute top-4 right-4 text-xs text-white px-3 py-1 rounded-full ${
+                    game.inscritos.includes(userName)
+                      ? "bg-red-600"
+                      : game.inscritos.length >= game.maxInscritos
+                      ? "bg-gray-600"
+                      : game.inscritos.length >= game.maxInscritos - 3
+                      ? "bg-yellow-500"
+                      : "bg-green-600"
+                  }`}>
+                    {game.inscritos.includes(userName)
+                      ? "Inscrito"
+                      : game.inscritos.length >= game.maxInscritos
+                      ? "Encerrado"
+                      : game.inscritos.length >= game.maxInscritos - 3
+                      ? "Quase cheio"
+                      : "Aberto"}
+                  </span>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-gray-200 mb-2">📅 {new Date(game.date).toLocaleDateString("pt-BR")}</p>
+                  <p className="text-gray-200 mb-2">⏰ {game.time}</p>
+                  <p className="text-gray-200 mb-2">📍 {game.location}</p>
+                  <p className="text-gray-200 mb-2">👥 {game.inscritos.length} / {game.maxInscritos} inscritos</p>
+                  <div className="w-full bg-gray-700 rounded-full h-2 mb-4 overflow-hidden">
+                    <div className="h-2 rounded-full bg-purple-500" style={{ width: `${progress}%` }} />
+                  </div>
+                  <Button
+                    className={`w-full text-white ${game.inscritos.includes(userName) ? "bg-red-600 hover:bg-red-700" : "bg-purple-600 hover:bg-purple-700"}`}
+                    onClick={() => handleClick(game)}
+                    disabled={game.inscritos.length >= game.maxInscritos && !game.inscritos.includes(userName)}
+                  >
+                    {buttonText}
+                  </Button>
+                </CardContent>
+              </Card>
             );
           })}
         </div>
-
-        {/* Modal de fallback caso falte dados */}
-        {selectedGame && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl shadow-lg p-6 w-full max-w-md">
-              <h2 className="text-2xl font-bold text-purple-600 mb-4">
-                Inscrição no {selectedGame.title}
-              </h2>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                  type="text"
-                  placeholder="Nome"
-                  value={registerData.name}
-                  onChange={(e) =>
-                    setRegisterData({ ...registerData, name: e.target.value })
-                  }
-                  className="w-full p-3 border border-gray-600 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  required
-                />
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={registerData.email}
-                  onChange={(e) =>
-                    setRegisterData({ ...registerData, email: e.target.value })
-                  }
-                  className="w-full p-3 border border-gray-600 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                  required
-                />
-                <input
-                  type="tel"
-                  placeholder="Telefone"
-                  value={registerData.phone}
-                  onChange={(e) =>
-                    setRegisterData({ ...registerData, phone: e.target.value })
-                  }
-                  className="w-full p-3 border border-gray-600 rounded-lg bg-black/40 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-                <div className="flex justify-between mt-4">
-                  <button
-                    type="button"
-                    onClick={() => setSelectedGame(null)}
-                    className="px-4 py-2 rounded bg-gray-400 text-white hover:bg-gray-500 transition"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700 transition"
-                  >
-                    Confirmar
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
