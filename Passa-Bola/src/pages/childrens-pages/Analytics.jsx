@@ -86,7 +86,7 @@ const Analytics = () => {
   });
 
   return (
-    <div className="h-screen w-screen bg-[#1c1c1c] p-6 overflow-y-auto flex flex-col items-center gap-10">
+    <div className="h-screen bg-[#1c1c1c] p-6 overflow-y-auto flex flex-col items-center gap-10">
       <h1 className="text-3xl font-bold text-white">Painel de Análises</h1>
 
       {/* ===== Cards gerais ===== */}

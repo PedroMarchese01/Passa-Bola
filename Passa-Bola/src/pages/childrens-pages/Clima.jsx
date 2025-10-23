@@ -142,7 +142,7 @@ const Clima = () => {
   };
 
   return (
-    <div className="h-screen w-screen bg-[#1c1c1c] text-white flex flex-col items-center p-6">
+    <div className="h-screen bg-[#1c1c1c] text-white flex flex-col items-center p-6">
       <h1 className="text-3xl font-bold mb-2">Clima Tempo</h1>
 
       <p className="mb-4 text-lg">

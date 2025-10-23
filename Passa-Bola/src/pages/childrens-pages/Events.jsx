@@ -167,7 +167,7 @@ const Events = () => {
   const jogosMensais = events.filter((e) => e.type === "mensal");
 
   return (
-    <div className="h-screen w-screen bg-[#1c1c1c] text-white flex flex-col overflow-hidden">
+    <div className="h-screen bg-[#1c1c1c] text-white flex flex-col overflow-hidden">
       {alert && (
         <Alert className="m-4 transition-all duration-300">
           <AlertTitle className="font-bold">{alert.title}</AlertTitle>

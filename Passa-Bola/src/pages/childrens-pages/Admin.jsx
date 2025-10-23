@@ -42,7 +42,7 @@ const CadastroAdministradora = () => {
   };
 
   return (
-    <div className="h-screen w-screen bg-[#1c1c1c] text-white flex flex-col items-center justify-center gap-6 p-8">
+    <div className="h-screen  bg-[#1c1c1c] text-white flex flex-col items-center justify-center gap-6 p-8">
       {alert && (
         <Alert className="transition-all duration-300 w-full max-w-lg">
           <AlertTitle>{alert.title}</AlertTitle>
