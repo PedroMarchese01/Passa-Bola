@@ -1,0 +1,4 @@
+Links:
+
+Vercel: https://passa-bola-fnl.vercel.app/
+repositório:https://github.com/PedroMarchese01/Passa-Bola?tab=readme-ov-file
