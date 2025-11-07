@@ -151,11 +151,7 @@ Esta é a área logada onde todo o gerenciamento da plataforma acontece.
 - **Contato:** [https://passa-bola-fnl.vercel.app/contato](https://passa-bola-fnl.vercel.app/contato)
 
 ### Painel Administrativo
-> **Obs.:** O acesso ao painel exige login de administrador.  
+> **Obs.:** O acesso ao painel exige login de administrador, porem não foi implementado para visualização.  
 - **Dashboard/Admin Home:** [https://passa-bola-fnl.vercel.app/admin](https://passa-bola-fnl.vercel.app/adminControlPainel)
-- **Analytics:** [https://passa-bola-fnl.vercel.app/admin/analytics](https://passa-bola-fnl.vercel.app/adminControlPainel/analytics)
-- **Eventos:** [https://passa-bola-fnl.vercel.app/admin/events](https://passa-bola-fnl.vercel.app/adminControlPainel/events)
-- **Usuários:** [https://passa-bola-fnl.vercel.app/admin/users](https://passa-bola-fnl.vercel.app/adminControlPainel/users)
-- **Cadastro de Administrador:** [https://passa-bola-fnl.vercel.app/admin/cadastro](https://passa-bola-fnl.vercel.app/adminControlPainel/cadastro)
-- **Clima:** [https://passa-bola-fnl.vercel.app/admin/clima](https://passa-bola-fnl.vercel.app/admin/clima)
+
 
